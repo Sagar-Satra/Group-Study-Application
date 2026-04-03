@@ -1,18 +1,19 @@
 package com.groupstudy.model;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
+
+import com.groupstudy.adt.MapInterface;
+import com.groupstudy.implementation.HashMapImplementation;
 
 public class StudyRoom {
 	
 	// Stores each user's current status (STUDYING / BREAK / LEFT)
     // Key: User, Value: Status
-    private Map<User, RoomStatus> userStatusMap = new HashMap<>();
+    private MapInterface<User, RoomStatus> userStatusMap = new HashMapImplementation<>();
 
     // Stores accumulated study time for each user (in milliseconds)
     // Key: User, Value: total study time
-    private Map<User, Long> studyTimeMap = new HashMap<>();
+    private MapInterface<User, Long> studyTimeMap = new HashMapImplementation<>();
     
     private String roomId;
     private String title;
@@ -95,7 +96,7 @@ public class StudyRoom {
     }
 
     // Get all user-status pairs (used by timer / UI)
-    public Map<User, RoomStatus> getAllStatus() {
+    public MapInterface<User, RoomStatus> getAllStatus() {
         return userStatusMap;
     }
     
