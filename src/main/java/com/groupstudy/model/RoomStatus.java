@@ -1,7 +1,6 @@
 package com.groupstudy.model;
 
-
-public enum Status {
+public enum RoomStatus {
     STUDYING,
     BREAK,
     LEFT
