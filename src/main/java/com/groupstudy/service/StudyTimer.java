@@ -26,6 +26,12 @@ public class StudyTimer {
 
             // Iterate through all users in the room
             for (User user : room.getAllStatus().keySet()) {
+            	
+            	RoomStatus status = room.getStatus(user);
+            	
+            	if(status == RoomStatus.LEFT) {
+            		continue;
+            	}
 
                 // Time since last interaction
                 long idle = now - user.getLastInteractionTime();

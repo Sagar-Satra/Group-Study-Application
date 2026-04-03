@@ -32,6 +32,12 @@ public class StudyRoom {
     // Add a user to the room
     // Default status is BREAK and initial study time is 0
     public void addUser(User user) {
+    	
+    	// User are not allowed to join multiple rooms at same time
+    	if(user.getCurrentStatus() == UserStatus.IN_ROOM) {
+    		System.out.println(user.getName() + " is already in another room");
+    		return;
+    	}
         userStatusMap.put(user, RoomStatus.BREAK);
         studyTimeMap.put(user, 0L);
         
@@ -40,9 +46,19 @@ public class StudyRoom {
 
     // Remove user from the room
     public void removeUser(User user) {
-        userStatusMap.remove(user);
-        studyTimeMap.remove(user); // keep both maps consistent
+        if(isPrivate) {
+        	// Private room mark the user that leave the room early as LEFT for the room status
+        	// Keep the user in the name list
+        	userStatusMap.put(user, RoomStatus.LEFT);
+        	
+        	// Stop timing but keep the studyTimeMap
+        } else {
+        	// Public room directly remove the left user
+        	userStatusMap.remove(user);
+        	studyTimeMap.remove(user);
+        }
         
+        // Once user leave the room, change the user status back to ONLINE
         user.setCurrentStatus(UserStatus.ONLINE);
     }
 
