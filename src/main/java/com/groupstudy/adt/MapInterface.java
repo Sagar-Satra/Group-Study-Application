@@ -17,6 +17,9 @@ public interface MapInterface<K, V> {
      * Returns null if the key does not exist.
      */
     V get(K key);
+    
+
+    V getOrDefault(K key, V defaultValue);
 
     /**
      * Checks whether the given key exists in the map.
@@ -27,4 +30,6 @@ public interface MapInterface<K, V> {
      * Removes the key-value pair associated with the given key.
      */
     void remove(K key);
+    
+    Iterable<K> keySet();
 }
