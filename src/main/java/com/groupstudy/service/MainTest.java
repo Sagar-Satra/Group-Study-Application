@@ -2,7 +2,6 @@ package com.groupstudy.service;
 
 import com.groupstudy.model.*;
 
-
 public class MainTest {
 
    public static void main(String[] args) throws Exception{
@@ -29,11 +28,34 @@ public class MainTest {
 	   // ===== Add user and add user to rooms=====
 	   User u1 = new User("Alice");
 	   User u2 = new User("Bob");
+	   
 	   privateRoom.addUser(u1);
 	   privateRoom.addUser(u2);
 	   
+	   // ===== Check the global status =====
+	   User u3 = new User("Ten");
+	   
+	   System.out.println("User global status: " + u3.getCurrentStatus());
+	   
+	   u3.login();
+	   
+	   System.out.println("User global status: " + u3.getCurrentStatus());
+	   
+	   privateRoom.addUser(u3);
+	   
+	   System.out.println("User global status: " + u3.getCurrentStatus());
+	   
+	   privateRoom.removeUser(u3);
+	   
+	   System.out.println("User global status: " + u3.getCurrentStatus());
+	   
+	   u3.logout();
+	   
+	   System.out.println("User global status: " + u3.getCurrentStatus());
+	   
+	   
 	   // ===== Check containsUser =====
-	   System.out.println("Cintains Alice: " + privateRoom.containsUser(u1));
+	   System.out.println("Contains Alice: " + privateRoom.containsUser(u1));
 	   System.out.println("Contains Bob: " + privateRoom.containsUser(u2));
 	   
 	   // ===== Start timer =====
@@ -57,7 +79,6 @@ public class MainTest {
 	   System.out.println("Final study time (ms): " + privateRoom.getStudyTime(u1) + "ms");
 	   
 	   System.out.println("Final study time (ms): " + privateRoom.getStudyTime(u2) + "ms");
-	   
 	   
    }
 }
