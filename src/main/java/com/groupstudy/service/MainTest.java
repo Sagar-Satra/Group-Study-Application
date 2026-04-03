@@ -12,12 +12,22 @@ public class MainTest {
         // ===== 2. Create Rooms =====
         String rawPassword = "1234";
         String hashed = auth.hashPassword(rawPassword);
+        RoomManager manager = new RoomManager();
 
         StudyRoom privateRoom = new StudyRoom("Final Prep", 5, true, hashed);
         StudyRoom publicRoom = new StudyRoom("Math Self Study", 3, false, null);
 
         System.out.println("Private Room ID: " + privateRoom.getRoomId());
         System.out.println("Public Room ID: " + publicRoom.getRoomId());
+        
+        manager.addRoom(privateRoom);
+        manager.addRoom(publicRoom);
+        
+        StudyRoom fetchedPrivate = manager.getRoom(privateRoom.getRoomId());
+        StudyRoom fetchedPublic = manager.getRoom(publicRoom.getRoomId());
+
+        System.out.println("Fetched Private Room Title: " + fetchedPrivate.getTitle());
+        System.out.println("Fetched Public Room Title: " + fetchedPublic.getTitle());
 
         // ===== 3. Password Verification =====
         System.out.println("\n=== Password Test ===");
@@ -28,6 +38,7 @@ public class MainTest {
         User u1 = new User("Alice");
         User u2 = new User("Bob");
         User u3 = new User("Ten");
+        User u4 = new User("Jhon");
 
         // ===== 5. Global Status Flow =====
         System.out.println("\n=== Global Status Test ===");
@@ -59,11 +70,13 @@ public class MainTest {
         System.out.println("\n=== Multiple Room Constraint Test ===");
         publicRoom.addUser(u1); // should be blocked
         publicRoom.addUser(u2); // should be blocked
+        publicRoom.addUser(u4);
 
         // ===== 8. Start Timer =====
         System.out.println("\n=== Timer Test (Private Room) ===");
         StudyTimer timer = new StudyTimer();
         timer.start(privateRoom);
+        timer.start(publicRoom);
 
         // Wait → users become STUDYING
         Thread.sleep(6000);
@@ -91,6 +104,7 @@ public class MainTest {
         System.out.println("Alice: " + privateRoom.getStudyTime(u1) + " ms");
         System.out.println("Bob: " + privateRoom.getStudyTime(u2) + " ms");
         System.out.println("Ten (LEFT, should stop): " + privateRoom.getStudyTime(u3) + " ms");
+        System.out.println("John: " + publicRoom.getStudyTime(u4) + " ms");
 
         // ===== 12. Remove Alice from Private Room (to allow joining public room) =====
         System.out.println("\n=== Prepare Public Room Test ===");
@@ -126,7 +140,10 @@ public class MainTest {
 
         System.out.println("\nPublic Room Users:");
         for (User user : publicRoom.getAllStatus().keySet()) {
-            System.out.println(user.getName());
+            System.out.println(user.getName() + " | " + publicRoom.getStatus(user));
         }
+        
+        // ===== 15. Check Room Manager Function =====
+        
     }
 }
