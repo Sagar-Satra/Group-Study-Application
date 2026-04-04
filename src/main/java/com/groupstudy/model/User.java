@@ -1,9 +1,10 @@
 package com.groupstudy.model;
 
 import com.groupstudy.adt.BagInterface;
-import com.groupstudy.implementations.ResizableArrayBag;
+import com.groupstudy.implementation.ResizableArrayBag;
 
 public class User {
+	
 	 // Basic user identifier (used as unique key in HashMap)
     private String name;
 
@@ -20,7 +21,7 @@ public class User {
     private Pokemon currentPokemon;
     private long totalStudyMinutes;
     private int currentStreak;
-    
+    private UserStatus currentStatus;
 
     public User(String name) {
         this.name = name;
@@ -36,6 +37,7 @@ public class User {
         this.currentPokemon = null;
         this.totalStudyMinutes = 0;
         this.currentStreak = 0;
+        this.currentStatus = UserStatus.OFFLINE;
     }
 
     public String getName() {
@@ -60,6 +62,22 @@ public class User {
     // Helps track elapsed time for study duration
     public void setLastUpdateTime(long t) {
         lastUpdateTime = t;
+    }
+    
+    public UserStatus getCurrentStatus() {
+    	return currentStatus;
+    }
+    
+    public void setCurrentStatus(UserStatus status) {
+    	this.currentStatus = status;
+    }
+    
+    public void login() {
+    	this.currentStatus = UserStatus.ONLINE;
+    }
+    
+    public void logout() {
+    	this.currentStatus = UserStatus.OFFLINE;
     }
 
     // We use name as the unique identifier for User

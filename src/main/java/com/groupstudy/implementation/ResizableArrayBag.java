@@ -1,4 +1,4 @@
-package com.groupstudy.implementations;
+package com.groupstudy.implementation;
 
 import java.util.Arrays;
 

@@ -4,7 +4,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.groupstudy.model.Status;
+import com.groupstudy.model.RoomStatus;
 import com.groupstudy.model.StudyRoom;
 import com.groupstudy.model.User;
 
@@ -26,6 +26,12 @@ public class StudyTimer {
 
             // Iterate through all users in the room
             for (User user : room.getAllStatus().keySet()) {
+            	
+            	RoomStatus status = room.getStatus(user);
+            	
+            	if(status == RoomStatus.LEFT) {
+            		continue;
+            	}
 
                 // Time since last interaction
                 long idle = now - user.getLastInteractionTime();
@@ -33,7 +39,7 @@ public class StudyTimer {
                 // If user has been inactive long enough → STUDYING
                 if (idle > IDLE_THRESHOLD_MS) {
 
-                    room.updateStatus(user, Status.STUDYING);
+                    room.updateStatus(user, RoomStatus.STUDYING);
 
                     // Calculate how much real time has passed since last update
                     long elapsed = now - user.getLastUpdateTime();
@@ -43,7 +49,7 @@ public class StudyTimer {
 
                 } else {
                     // Otherwise, user is interacting → BREAK
-                    room.updateStatus(user, Status.BREAK);
+                    room.updateStatus(user, RoomStatus.BREAK);
                 }
 
                 // Update last update time for next calculation
