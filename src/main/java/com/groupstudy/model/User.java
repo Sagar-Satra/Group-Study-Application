@@ -1,5 +1,8 @@
 package com.groupstudy.model;
 
+import com.groupstudy.adt.BagInterface;
+import com.groupstudy.implementations.ResizableArrayBag;
+
 public class User {
 	 // Basic user identifier (used as unique key in HashMap)
     private String name;
@@ -11,6 +14,13 @@ public class User {
     // The last time we updated this user's study time
     // Used to calculate how much real time has passed
     private long lastUpdateTime;
+    
+    // new fields for pokemon trophy and leaderboard tracking
+    private BagInterface<Trophy> trophyBag;
+    private Pokemon currentPokemon;
+    private long totalStudyMinutes;
+    private int currentStreak;
+    
 
     public User(String name) {
         this.name = name;
@@ -20,6 +30,12 @@ public class User {
         long now = System.currentTimeMillis();
         this.lastInteractionTime = now;
         this.lastUpdateTime = now;
+        
+        // initialize tracking fields
+        this.trophyBag = new ResizableArrayBag<Trophy>();
+        this.currentPokemon = null;
+        this.totalStudyMinutes = 0;
+        this.currentStreak = 0;
     }
 
     public String getName() {
@@ -59,5 +75,71 @@ public class User {
     @Override
     public int hashCode() {
         return name.hashCode();
+    }
+    
+    
+    // pokemon methods
+    public void setCurrentPokemon(Pokemon pokemon) {
+    	this.currentPokemon = pokemon;
+    }
+    
+    public Pokemon getCurrPokemon() {
+    	return currentPokemon;
+    }
+    
+    public boolean hasActivePokemon() {
+    	return currentPokemon != null;
+    }
+    
+    // trophy methods
+    public void addTrophy(Trophy trophy) {
+    	trophyBag.add(trophy);
+    }
+    
+    public BagInterface<Trophy> getTrophyBag(){
+    	return trophyBag;
+    }
+    
+    public int getTrophyCount() {
+        return trophyBag.getCurrentSize();
+    }
+    
+    public Trophy[] getAllTrophies() {
+        Object[] objects = trophyBag.toArray();  // Get Object[]
+        Trophy[] trophies = new Trophy[objects.length];  // Create new Trophy[]
+        
+        for (int i = 0; i < objects.length; i++) {
+            trophies[i] = (Trophy) objects[i];  // Cast each element to trophy to avoid ClassCast option
+        }
+        
+        return trophies;
+    }
+    
+    public boolean hasTrophy(Trophy trophy) {
+        return trophyBag.contains(trophy);
+    }
+    
+    // tracking total study time for leaderboard
+    public void addStudyTime(long minutes) {
+        this.totalStudyMinutes += minutes;
+    }
+    
+    public long getTotalStudyMinutes() {
+        return totalStudyMinutes;
+    }
+    
+    public int getCurrentStreak() {
+        return currentStreak;
+    }
+    
+    public void setCurrentStreak(int streak) {
+        this.currentStreak = streak;
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("User{name='%s', trophies=%d, pokemon=%s}",
+            name, getTrophyCount(), 
+            (currentPokemon != null ? currentPokemon.getCurrentName() : "none"));
     }
 }
