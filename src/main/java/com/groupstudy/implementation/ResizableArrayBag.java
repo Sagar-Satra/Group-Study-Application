@@ -197,7 +197,9 @@ public class ResizableArrayBag<T> implements BagInterface<T> {
 	 */
 	@Override
 	public String toString() {
-		return "myBag = [" + Arrays.toString(myBag) + "]";
+		checkInitialization();
+		T[] activeEntries = Arrays.copyOf(myBag, numOfEntries);
+	    return "myBag = [" + Arrays.toString(activeEntries) + "]";
 	}
 	
 	//======== other helper methods =================
