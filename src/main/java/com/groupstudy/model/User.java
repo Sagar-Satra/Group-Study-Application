@@ -1,6 +1,8 @@
 package com.groupstudy.model;
 
 import com.groupstudy.adt.BagInterface;
+import com.groupstudy.adt.QueueInterface;
+import com.groupstudy.implementation.QueueImplementation;
 import com.groupstudy.implementation.ResizableArrayBag;
 
 public class User {
@@ -23,6 +25,10 @@ public class User {
     private int currentStreak;
     private UserStatus currentStatus;
 
+    // new field to keep track of each user's notification queue
+    private QueueInterface<Notification> notificationQueue;
+    
+    
     public User(String name) {
         this.name = name;
 
@@ -32,12 +38,16 @@ public class User {
         this.lastInteractionTime = now;
         this.lastUpdateTime = now;
         
-        // initialize tracking fields
+        // initialize pokemon/trophy related tracking fields
         this.trophyBag = new ResizableArrayBag<Trophy>();
         this.currentPokemon = null;
         this.totalStudyMinutes = 0;
         this.currentStreak = 0;
         this.currentStatus = UserStatus.OFFLINE;
+        
+        // initialize notification related field
+        this.notificationQueue = new QueueImplementation<Notification>();
+        
     }
 
     public String getName() {
@@ -153,6 +163,32 @@ public class User {
     public void setCurrentStreak(int streak) {
         this.currentStreak = streak;
     }
+    
+    // methods related to notification queue tracking
+    public void addNotification(Notification notification) {
+    	notificationQueue.enqueue(notification);
+    }
+    
+    public Notification getNextNotification() {
+    	if (!notificationQueue.isEmpty()) {
+    		return notificationQueue.dequeue();
+    	}
+    	return null;
+    }
+    
+    public int getPendingNotificationCount() {
+    	return notificationQueue.getSize();
+    }
+    
+    public void clearNotifications() {
+    	notificationQueue.clear();
+    }
+    
+    public boolean hasPendingNotifications() {
+    	return !notificationQueue.isEmpty();
+    }
+    
+    
     
     @Override
     public String toString() {
