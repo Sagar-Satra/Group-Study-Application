@@ -223,7 +223,7 @@ public class ResizableArrayBag<T> implements BagInterface<T> {
 		int newSize = myBag.length + 15;
 		// check if the newSize overshoots max capacity
 		if (newSize > MAXIMUM_CAPACITY) {
-			throw new IllegalStateException("The new capacity is exceedding the max capacity of " + MAXIMUM_CAPACITY + ". Hence, cannot add next new element. Capacity kept at 50.");
+			throw new IllegalStateException("The new capacity is exceedding the max capacity of " + MAXIMUM_CAPACITY + ". Hence, cannot add next new element.");
 		}
 		// if new size is within bounds, copy the items of old array into new array and assign it to myBag reference variable
 		myBag = Arrays.copyOf(myBag, newSize);

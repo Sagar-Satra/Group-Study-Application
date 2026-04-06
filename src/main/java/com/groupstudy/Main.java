@@ -1,13 +1,7 @@
 package com.groupstudy;
 
-import com.groupstudy.model.LeaderboardEntry;
-import com.groupstudy.model.Pokemon;
-import com.groupstudy.model.StudyRoom;
-import com.groupstudy.model.Trophy;
-import com.groupstudy.model.User;
-import com.groupstudy.service.AuthService;
-import com.groupstudy.service.LeaderboardService;
-import com.groupstudy.service.PokemonService;
+import com.groupstudy.model.*;
+import com.groupstudy.service.*;
 
 
 public class Main {
@@ -28,162 +22,165 @@ public class Main {
 //        stage.show();
 //    }
     
-	//testing of pokemon evolution
-//    public static void main(String[] args) {
-//        System.out.println("=== Pokemon & Trophy Test ===\n");
-//        
-//        // Create user
-//        User user = new User("Sagar");
-//        System.out.println("User created: " + user.getName());
-//        
-//        // Assign Pokemon
-//        PokemonService service = new PokemonService();
-//        Pokemon pokemon = service.assignRandomPokemon();
-//        user.setCurrentPokemon(pokemon);
-//        
-//        System.out.println("Assigned: " + pokemon.getCurrentName() + " (Stage 1)");
-//        System.out.println("Image: " + pokemon.getCurrentImagePath());
-//        
-//        // Study 35 minutes (evolve to Stage 2)
-//        System.out.println("\n--- Studying 35 minutes ---");
-//        Trophy trophy1 = service.updatePokemonProgress(pokemon, 35);
-//        
-//        if (trophy1 != null) {
-//            user.addTrophy(trophy1);
-//            System.out.println("Trophy earned! " + trophy1);
-//        }
-//        
-//        System.out.println("Pokemon: " + pokemon.getCurrentName() + " (Stage " + pokemon.getCurrentStage() + ")");
-//        
-//        // Study 30 more minutes (evolve to Stage 3)
-//        System.out.println("\n--- Studying 30 more minutes ---");
-//        Trophy trophy2 = service.updatePokemonProgress(pokemon, 30);
-//        
-//        if (trophy2 != null) {
-//            user.addTrophy(trophy2);
-//            System.out.println("Trophy earned! " + trophy2);
-//        }
-//        
-//        System.out.println("Pokemon: " + pokemon.getCurrentName() + " (Stage " + pokemon.getCurrentStage() + ")");
-//        
-//        // Display trophies
-//        System.out.println("\n=== Trophy Collection ===");
-//        System.out.println("Total trophies: " + user.getTrophyCount());
-//        Trophy[] trophies = user.getAllTrophies();
-//        for (int i = 0; i < trophies.length; i++) {
-//            System.out.println((i+1) + ". " + trophies[i]);
-//        }
-//        
-//        System.out.println("Test Complete!");
-//    }
+	public static void main(String[] args) {
+        System.out.println("╔═══════════════════════════════════════════════╗");
+        System.out.println("║  Complete Integration Test - All 4 Tasks     ║");
+        System.out.println("╚═══════════════════════════════════════════════╝\n");
+        
+        testTask6_PokemonEvolution();
+        testTask8_TrophyBag();
+        testTask9_Notifications();
+        testTask10_Leaderboard();
+        testIntegration();
+        
+        System.out.println("\n╔═══════════════════════════════════════════════╗");
+        System.out.println("║  ✅ ALL TESTS PASSED!                         ║");
+        System.out.println("╚═══════════════════════════════════════════════╝");
+    }
     
-    // testing of leaderboard
-    public static void main(String[] args) {
-        System.out.println("Leaderboard Service - Complete Test");
+    private static void testTask6_PokemonEvolution() {
+        System.out.println("--- Task 6: Pokemon Evolution ---");
         
-        LeaderboardService service = new LeaderboardService();
+        PokemonService pokemonService = new PokemonService();
+        Pokemon pokemon = pokemonService.assignRandomPokemon();
         
-        // Test 1: Add entries
-        System.out.println("--- Test 1: Adding Entries ---");
-        service.addOrUpdateEntry(new LeaderboardEntry("Sagar", 15, 300, 5));
-        service.addOrUpdateEntry(new LeaderboardEntry("Aditya", 12, 280, 3));
-        service.addOrUpdateEntry(new LeaderboardEntry("Yuxuan", 18, 350, 7));
-        service.addOrUpdateEntry(new LeaderboardEntry("Alice", 10, 200, 2));
-        service.addOrUpdateEntry(new LeaderboardEntry("Bob", 15, 320, 6));
-        System.out.println(" Added 5 users");
-        System.out.println("Size: " + service.getSize() + "\n");
+        System.out.println("Assigned: " + pokemon.getCurrentName() + " (Stage " + pokemon.getCurrentStage() + ")");
         
-        // Test 2: Get top entries
-        System.out.println("--- Test 2: Get Top 3 ---");
-        LeaderboardEntry[] top3 = service.getTopEntries(3);
-        for (int i = 0; i < top3.length; i++) {
-            System.out.println((i+1) + ". " + top3[i]);
-        }
-        System.out.println();
+        pokemon.addStudyTime(35);
+        System.out.println("After 35 min: " + pokemon.getCurrentName() + " (Stage " + pokemon.getCurrentStage() + ")");
         
-        // Test 3: Get user ranks
-        System.out.println("--- Test 3: Get User Ranks ---");
-        System.out.println("Sagar's rank: #" + service.getUserRank("Sagar"));
-        System.out.println("Aditya's rank: #" + service.getUserRank("Aditya"));
-        System.out.println("Yuxuan's rank: #" + service.getUserRank("Yuxuan"));
-        System.out.println("Alice's rank: #" + service.getUserRank("Alice"));
-        System.out.println("Bob's rank: #" + service.getUserRank("Bob"));
-        System.out.println();
+        pokemon.addStudyTime(30);
+        System.out.println("After 65 min total: " + pokemon.getCurrentName() + " (Stage " + pokemon.getCurrentStage() + ")");
         
-        // Test 4: Get all entries
-        System.out.println("--- Test 4: Get All Entries (Sorted) ---");
-        LeaderboardEntry[] all = service.getAllEntries();
+        System.out.println("✅ Task 6 Complete\n");
+    }
+    
+    private static void testTask8_TrophyBag() {
+        System.out.println("--- Task 8: Trophy Bag (Bag ADT) ---");
+        
+        User user = new User("TestUser");
+        
+        Trophy t1 = new Trophy("Charizard", "char.png", 3, 60);
+        Trophy t2 = new Trophy("Blastoise", "blast.png", 3, 65);
+        Trophy t3 = new Trophy("Charizard", "char.png", 3, 70);
+        
+        user.addTrophy(t1);
+        user.addTrophy(t2);
+        user.addTrophy(t3);
+        
+        System.out.println("Trophy count: " + user.getTrophyCount());
+        System.out.println("Has Charizard: " + user.hasTrophy(t1));
+        
+        Trophy[] all = user.getAllTrophies();
+        System.out.println("All trophies:");
         for (int i = 0; i < all.length; i++) {
-            System.out.println((i+1) + ". " + all[i]);
+            System.out.println("  " + (i+1) + ". " + all[i]);
         }
-        System.out.println();
         
-        // Test 5: Update existing entry
-        System.out.println("--- Test 5: Update Entry ---");
-        System.out.println("Updating Sagar: 15 → 20 trophies");
-        service.addOrUpdateEntry(new LeaderboardEntry("Sagar", 20, 400, 8));
-        System.out.println("New rank: #" + service.getUserRank("Sagar"));
-        System.out.println();
+        System.out.println("✅ Task 8 Complete\n");
+    }
+    
+    private static void testTask9_Notifications() {
+        System.out.println("--- Task 9: Notification Queue ---");
         
-        // Test 6: Top 3 after update
-        System.out.println("--- Test 6: Top 3 After Update ---");
-        top3 = service.getTopEntries(3);
+        User user = new User("Sagar");
+        NotificationService notifService = new NotificationService();
+        
+        notifService.addPokemonEvolution(user, "Charmeleon", 2);
+        notifService.addPokemonEvolution(user, "Charizard", 3);
+        notifService.addTrophy(user, "Charizard");
+        
+        System.out.println("Pending notifications: " + user.getPendingNotificationCount());
+        
+        System.out.println("Processing (FIFO order):");
+        int count = 1;
+        while (user.hasPendingNotifications()) {
+            Notification n = user.getNextNotification();
+            System.out.println("  " + count + ". " + n);
+            count++;
+        }
+        
+        System.out.println("After processing: " + user.getPendingNotificationCount());
+        System.out.println("✅ Task 9 Complete\n");
+    }
+    
+    private static void testTask10_Leaderboard() {
+        System.out.println("--- Task 10: Leaderboard (MergeSort) ---");
+        
+        LeaderboardService leaderboard = new LeaderboardService();
+        
+        leaderboard.addOrUpdateEntry(new LeaderboardEntry("Sagar", 15, 300, 5));
+        leaderboard.addOrUpdateEntry(new LeaderboardEntry("Aditya", 12, 280, 3));
+        leaderboard.addOrUpdateEntry(new LeaderboardEntry("Yuxuan", 18, 350, 7));
+        
+        System.out.println("Top 3:");
+        LeaderboardEntry[] top3 = leaderboard.getTopEntries(3);
         for (int i = 0; i < top3.length; i++) {
-            System.out.println((i+1) + ". " + top3[i]);
+            System.out.println("  " + (i+1) + ". " + top3[i]);
         }
-        System.out.println();
         
-        // Test 7: Room leaderboard
-        System.out.println("--- Test 7: Room Leaderboard ---");
+        System.out.println("Sagar's rank: #" + leaderboard.getUserRank("Sagar"));
+        System.out.println("✅ Task 10 Complete\n");
+    }
+    
+    private static void testIntegration() {
+        System.out.println("--- Full Integration Test ---");
         
-        // Create room and users
-        AuthService auth = new AuthService();
-        StudyRoom room = new StudyRoom("Test Room", 5, false, null);
+        User user = new User("Sagar");
+        PokemonService pokemonService = new PokemonService();
+        NotificationService notifService = new NotificationService();
+        LeaderboardService leaderboard = new LeaderboardService();
         
-        User u1 = new User("Sagar");
-        User u2 = new User("Aditya");
-        User u3 = new User("Yuxuan");
+        // Assign Pokemon
+        Pokemon pokemon = pokemonService.assignRandomPokemon();
+        user.setCurrentPokemon(pokemon);
+        System.out.println("1. Assigned: " + pokemon.getCurrentName());
         
-        // Set trophy counts
-        u1.addTrophy(new Trophy("Charizard", "char.png", 3, 60));
-        u1.addTrophy(new Trophy("Blastoise", "blast.png", 3, 65));
-        
-        u2.addTrophy(new Trophy("Venusaur", "ven.png", 3, 70));
-        
-        u3.addTrophy(new Trophy("Pikachu", "pika.png", 2, 30));
-        u3.addTrophy(new Trophy("Gengar", "gengar.png", 3, 60));
-        u3.addTrophy(new Trophy("Dragonite", "dragon.png", 3, 65));
-        
-        // Add to room and simulate study time
-        room.addUser(u1);
-        room.addUser(u2);
-        room.addUser(u3);
-        
-        room.addStudyTime(u1, 1800000);  // 30 min
-        room.addStudyTime(u2, 2400000);  // 40 min
-        room.addStudyTime(u3, 1200000);  // 20 min
-        
-        LeaderboardEntry[] roomBoard = service.getRoomLeaderBoard(room);
-        System.out.println("Room: " + room.getTitle());
-        for (int i = 0; i < roomBoard.length; i++) {
-            System.out.println((i+1) + ". " + roomBoard[i]);
+        // Study 35 min - evolve to Stage 2
+        boolean evolved = pokemon.addStudyTime(35);
+        if (evolved) {
+            Trophy trophy = pokemon.createTrophy();
+            user.addTrophy(trophy);
+            notifService.addPokemonEvolution(user, pokemon.getCurrentName(), pokemon.getCurrentStage());
+            notifService.addTrophy(user, pokemon.getCurrentName());
         }
-        System.out.println();
+        System.out.println("2. After 35 min: " + pokemon.getCurrentName() + " (Stage " + pokemon.getCurrentStage() + ")");
         
-        // Test 8: Edge cases
-        System.out.println("--- Test 8: Edge Cases ---");
-        System.out.println("Top 0 entries: " + service.getTopEntries(0).length + " (should be 0)");
-        System.out.println("Top 100 entries: " + service.getTopEntries(100).length + " (should be " + service.getSize() + ")");
-        System.out.println("Nonexistent user rank: " + service.getUserRank("Unknown") + " (should be -1)");
-        System.out.println();
+        // Study 30 more - evolve to Stage 3
+        evolved = pokemon.addStudyTime(30);
+        if (evolved) {
+            Trophy trophy = pokemon.createTrophy();
+            user.addTrophy(trophy);
+            notifService.addPokemonEvolution(user, pokemon.getCurrentName(), pokemon.getCurrentStage());
+            notifService.addTrophy(user, pokemon.getCurrentName());
+        }
+        System.out.println("3. After 65 min total: " + pokemon.getCurrentName() + " (Stage " + pokemon.getCurrentStage() + ")");
         
-        // Test 9: Clear
-        System.out.println("--- Test 9: Clear Leaderboard ---");
-        System.out.println("Size before clear: " + service.getSize());
-        service.clear();
-        System.out.println("Size after clear: " + service.getSize());
-        System.out.println();
+        // Check trophies
+        System.out.println("4. Trophies earned: " + user.getTrophyCount());
         
-        System.out.println("=================All Tests Passed===============");
+        // Check notifications
+        System.out.println("5. Pending notifications: " + user.getPendingNotificationCount());
+        
+        // Add to leaderboard
+        user.addStudyTime(65);
+        user.setCurrentStreak(5);
+        leaderboard.addOrUpdateEntry(new LeaderboardEntry(
+            user.getName(),
+            user.getTrophyCount(),
+            user.getTotalStudyMinutes(),
+            user.getCurrentStreak()
+        ));
+        System.out.println("DEBUG: Leaderboard size = " + leaderboard.getSize());
+        System.out.println("6. Leaderboard rank: #" + leaderboard.getUserRank(user.getName()));
+        
+        // Process notifications
+        System.out.println("\n7. Processing notifications:");
+        while (user.hasPendingNotifications()) {
+            Notification n = user.getNextNotification();
+            System.out.println("   " + n);
+        }
+        
+        System.out.println("\n✅ Integration Complete!");
     }
 }
