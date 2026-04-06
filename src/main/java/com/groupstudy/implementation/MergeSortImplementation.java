@@ -6,8 +6,12 @@ public class MergeSortImplementation implements SortInterface {
     
     @Override
     public <T extends Comparable<? super T>> void sort(T[] array) {
-        if (array == null || array.length <= 1) {
-        	throw new IllegalArgumentException("Array cannot be null or empty");
+        if (array == null) {
+        	throw new IllegalArgumentException("Array cannot be null");
+        }
+        
+        if (array.length <= 1) {
+        	return;
         }
         
         @SuppressWarnings("unchecked")
