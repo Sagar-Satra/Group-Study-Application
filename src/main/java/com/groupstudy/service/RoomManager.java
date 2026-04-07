@@ -35,4 +35,19 @@ public class RoomManager {
 	public MapInterface<String, StudyRoom> getAllRoom(){
 		return rooms;
 	}
+	
+	public ListInterface<StudyRoom> getPublicRooms() {
+	    ListInterface<StudyRoom> list = new ArrayListImplementation<>();
+
+	    for (String key : rooms.keySet()) {
+	        StudyRoom room = rooms.get(key);
+
+	        // Only add public room
+	        if (!room.isPrivate()) {
+	            list.add(room);
+	        }
+	    }
+
+	    return list;
+	}
 }
