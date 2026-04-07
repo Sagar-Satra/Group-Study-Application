@@ -46,6 +46,36 @@ public class StudyTimer {
 
                     // Add that time to total study time
                     room.addStudyTime(user, elapsed);
+                    
+                    // =========================
+                    // CONNECT TO POKEMON SYSTEM
+                    // =========================
+                    
+                    // Convert ms to minutes (avoid 0 by using small threshold)
+                    // CURRENT ONE MIN SET AS FAST AS 1 SEC
+                    long minutes = 1;
+                    
+                    // Accumulate leftover time
+                    if (minutes > 0) {
+                    	
+                    	// Update iser's total study minutes
+                    	user.addStudyTime(minutes);
+                    	
+                    	// Get user's current pokemon
+                    	if(user.getCurrentPokemon() != null) {
+                    	
+                    		boolean evolved = user.getCurrentPokemon().addStudyTime(minutes);
+                    	
+                    		// If evolution happens
+                    		if(evolved) {
+                    			System.out.println(user.getName() + "'s Pokemon evolved to " + user.getCurrentPokemon().getCurrentName());
+                    		
+                    			if (user.getCurrentPokemon().createTrophy() != null) {
+                    				user.addTrophy(user.getCurrentPokemon().createTrophy());
+                    			}
+                    		}
+                    	}
+                    }
 
                 } else {
                     // Otherwise, user is interacting → BREAK
