@@ -3,6 +3,8 @@ package com.groupstudy;
 import com.groupstudy.implementation.ArrayListImplementation;
 import com.groupstudy.model.StudyRoom;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -13,8 +15,15 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class LobbyUI extends Application {
+
+    // store rooms
+    private ArrayListImplementation<StudyRoom> rooms;
+
+    // UI container for room cards
+    private VBox roomList;
 
     @Override
     public void start(Stage primaryStage) {
@@ -28,77 +37,111 @@ public class LobbyUI extends Application {
         topBar.setSpacing(10);
         topBar.setStyle("-fx-background-color: #eeeeee;");
 
-        // Left side: Profile button
         Button profileBtn = new Button("👤");
-
-        // Right side: Create and Search buttons
         Button addBtn = new Button("➕");
         Button searchBtn = new Button("🔍");
 
-        // Spacer pushes buttons to the right
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        // Add components into top bar
         topBar.getChildren().addAll(profileBtn, spacer, addBtn, searchBtn);
 
-        // ===== Room List (Center) =====
-        VBox roomList = new VBox();
+        // ===== Room List =====
+        roomList = new VBox();
         roomList.setSpacing(20);
         roomList.setPadding(new Insets(20));
 
-        // ===== Sample Data (for testing UI) =====
-        ArrayListImplementation<StudyRoom> rooms = new ArrayListImplementation<>();
+        // ===== Data =====
+        rooms = new ArrayListImplementation<>();
 
-        // Create sample rooms (duration in milliseconds)
-        StudyRoom room1 = new StudyRoom("Final Prep", 5, 60000, false, null);
-        StudyRoom room2 = new StudyRoom("Math Study", 4, 70000, false, null);
+        StudyRoom room1 = new StudyRoom("Final Prep", 5, 10000, false, null);
+        StudyRoom room2 = new StudyRoom("Math Study", 4, 15000, false, null);
 
         rooms.add(room1);
         rooms.add(room2);
 
-        // ===== Generate Room Cards dynamically =====
+        // ===== Initial render =====
+        refreshRoomList();
+
+        // ===== Timeline (auto update every second) =====
+        Timeline timeline = new Timeline(
+            new KeyFrame(Duration.seconds(1), e -> {
+
+                // check session end
+                for (int i = 0; i < rooms.getLength(); i++) {
+                    StudyRoom room = rooms.get(i);
+
+                    if (room.isSessionOver()) {
+                        room.endSession();
+                    }
+                }
+
+                // remove expired rooms
+                cleanRooms();
+
+                // redraw UI
+                refreshRoomList();
+            })
+        );
+
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+
+        // ===== Button actions =====
+        profileBtn.setOnAction(e -> {
+            System.out.println("Go to profile page");
+        });
+
+        addBtn.setOnAction(e -> {
+            System.out.println("Create new room");
+        });
+
+        searchBtn.setOnAction(e -> {
+            System.out.println("Search rooms");
+        });
+
+        // ===== Layout =====
+        root.setTop(topBar);
+        root.setCenter(roomList);
+
+        Scene scene = new Scene(root, 400, 600);
+
+        primaryStage.setTitle("Lobby");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    // rebuild room cards UI
+    private void refreshRoomList() {
+
+        roomList.getChildren().clear();
+
         for (int i = 0; i < rooms.getLength(); i++) {
 
             StudyRoom room = rooms.get(i);
 
             RoomCardUI card = new RoomCardUI(room);
 
-            // Click event (later can navigate to Room UI)
             card.setOnMouseClicked(e -> {
                 System.out.println("Enter room: " + room.getTitle());
             });
 
             roomList.getChildren().add(card);
         }
+    }
 
-        // ===== Button Actions =====
+    // remove rooms after delay
+    private void cleanRooms() {
 
-        // Navigate to profile page
-        profileBtn.setOnAction(e -> {
-            System.out.println("Go to profile page");
-        });
+        for (int i = 0; i < rooms.getLength(); i++) {
 
-        // Create new room
-        addBtn.setOnAction(e -> {
-            System.out.println("Create new room");
-        });
+            StudyRoom room = rooms.get(i);
 
-        // Search rooms
-        searchBtn.setOnAction(e -> {
-            System.out.println("Search rooms");
-        });
-
-        // ===== Set Layout =====
-        root.setTop(topBar);
-        root.setCenter(roomList);
-
-        // ===== Scene =====
-        Scene scene = new Scene(root, 400, 600);
-
-        primaryStage.setTitle("Lobby");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+            if (room.shouldRemove()) {
+                rooms.remove(i);
+                i--; // prevent skipping
+            }
+        }
     }
 
     public static void main(String[] args) {

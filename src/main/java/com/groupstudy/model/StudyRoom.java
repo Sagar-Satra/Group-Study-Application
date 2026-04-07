@@ -20,6 +20,7 @@ public class StudyRoom {
     private int capacity;
     private long startTime;
     private long duration;
+    private long endTime;
     private boolean isClosed = false;
     private boolean isPrivate;
     private String passwordHash; // Only use for private room
@@ -106,6 +107,7 @@ public class StudyRoom {
     	if (isClosed) return;
     	
     	isClosed = true;
+    	endTime = System.currentTimeMillis();
 
         for (User user : userStatusMap.keySet()) {
             userStatusMap.put(user, RoomStatus.SESSION_ENDED);
@@ -113,6 +115,13 @@ public class StudyRoom {
         }
 
         System.out.println("Room " + roomId + " is now CLOSED.");
+    }
+    
+    // Remove the room from the lobby after 10s the room session ended
+    public boolean shouldRemove() {
+    	if(!isClosed) return false;
+    	
+    	return System.currentTimeMillis() - endTime > 10000;
     }
     
     public int getCurrentSize() {
