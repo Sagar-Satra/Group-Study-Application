@@ -20,7 +20,7 @@ import javafx.util.Duration;
 public class LobbyUI extends Application {
 
     // store rooms
-    private ArrayListImplementation<StudyRoom> rooms;
+    private static ArrayListImplementation<StudyRoom> rooms = new ArrayListImplementation<>();
 
     // UI container for room cards
     private VBox roomList;
@@ -45,7 +45,7 @@ public class LobbyUI extends Application {
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         topBar.getChildren().addAll(profileBtn, spacer, addBtn, searchBtn);
-
+        
         // ===== Room List =====
         roomList = new VBox();
         roomList.setSpacing(20);
@@ -54,11 +54,13 @@ public class LobbyUI extends Application {
         // ===== Data =====
         rooms = new ArrayListImplementation<>();
 
-        StudyRoom room1 = new StudyRoom("Final Prep", 5, 10000, false, null);
-        StudyRoom room2 = new StudyRoom("Math Study", 4, 15000, false, null);
+        if (rooms.getLength() == 0) {
+            StudyRoom room1 = new StudyRoom("Final Prep", 5, 10000, false, null);
+            StudyRoom room2 = new StudyRoom("Math Study", 4, 15000, false, null);
 
-        rooms.add(room1);
-        rooms.add(room2);
+            rooms.add(room1);
+            rooms.add(room2);
+        }
 
         // ===== Initial render =====
         refreshRoomList();
@@ -71,7 +73,7 @@ public class LobbyUI extends Application {
                 for (int i = 0; i < rooms.getLength(); i++) {
                     StudyRoom room = rooms.get(i);
 
-                    if (room.isSessionOver()) {
+                    if (!room.isClosed() && room.isSessionOver()) {
                         room.endSession();
                     }
                 }
@@ -89,15 +91,15 @@ public class LobbyUI extends Application {
 
         // ===== Button actions =====
         profileBtn.setOnAction(e -> {
-            System.out.println("Go to profile page");
+            UserProfileUI.show(primaryStage);
         });
-
+        
         addBtn.setOnAction(e -> {
-            System.out.println("Create new room");
+        	RoomCreationUI.show(primaryStage);
         });
-
+        
         searchBtn.setOnAction(e -> {
-            System.out.println("Search rooms");
+        	RoomSearchUI.show(primaryStage);
         });
 
         // ===== Layout =====
@@ -111,6 +113,12 @@ public class LobbyUI extends Application {
         primaryStage.show();
     }
 
+    public static void show(Stage stage) {
+
+        LobbyUI app = new LobbyUI();
+        app.start(stage);
+    }
+    
     // rebuild room cards UI
     private void refreshRoomList() {
 
