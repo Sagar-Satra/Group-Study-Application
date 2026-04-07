@@ -46,6 +46,7 @@ public class RoomCardUI extends VBox {
     private void updateTime() {
     	if(room.isClosed()) {
     		timeLabel.setText("Session Ended");
+    		return;
     	}else {
     		long remaining = room.getRemainingTime() / 1000;
     		timeLabel.setText("Remaining: " + remaining + "s");
