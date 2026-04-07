@@ -111,7 +111,7 @@ public class User {
     	this.currentPokemon = pokemon;
     }
     
-    public Pokemon getCurrPokemon() {
+    public Pokemon getCurrentPokemon() {
     	return currentPokemon;
     }
     
