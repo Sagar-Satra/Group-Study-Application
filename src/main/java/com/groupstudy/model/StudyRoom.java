@@ -18,13 +18,18 @@ public class StudyRoom {
     private String roomId;
     private String title;
     private int capacity;
+    private long startTime;
+    private long duration;
+    private boolean isClosed = false;
     private boolean isPrivate;
     private String passwordHash; // Only use for private room
     
-    public StudyRoom(String title, int capacity, boolean isPrivate, String passwordHash) {
+    public StudyRoom(String title, int capacity, long duration, boolean isPrivate, String passwordHash) {
     	this.roomId = generateRoomId();
     	this.title = title; 
     	this.capacity = capacity;
+    	this.startTime = System.currentTimeMillis();
+    	this.duration = duration;
     	this.isPrivate = isPrivate; 
     	this.passwordHash = passwordHash;
     }
@@ -87,6 +92,27 @@ public class StudyRoom {
     
     public int getCapacity() {
     	return capacity;
+    }
+    
+    public boolean isSessionOver() {
+    	return System.currentTimeMillis() - startTime >= duration;
+    }
+    
+    public boolean isClosed() {
+    	return isClosed;
+    }
+    
+    public void endSession() {
+    	if (isClosed) return;
+    	
+    	isClosed = true;
+
+        for (User user : userStatusMap.keySet()) {
+            userStatusMap.put(user, RoomStatus.SESSION_ENDED);
+            user.setCurrentStatus(UserStatus.ONLINE);
+        }
+
+        System.out.println("Room " + roomId + " is now CLOSED.");
     }
     
     // Add study time (called by timer)

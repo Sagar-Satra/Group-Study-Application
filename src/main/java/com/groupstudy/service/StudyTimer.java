@@ -20,6 +20,12 @@ public class StudyTimer {
 
         // Run this task every 1 second
         scheduler.scheduleAtFixedRate(() -> {
+        	
+        	if (room.isSessionOver()) {
+                room.endSession();
+                scheduler.shutdown();
+                return;
+            }
 
             // Current system time (used for all calculations)
             long now = System.currentTimeMillis();
