@@ -3,5 +3,6 @@ package com.groupstudy.model;
 public enum RoomStatus {
     STUDYING,
     BREAK,
-    LEFT
+    LEFT,
+    SESSION_ENDED
 }

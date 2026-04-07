@@ -15,8 +15,8 @@ public class MainTest {
         String hashed = auth.hashPassword("1234");
         RoomManager manager = new RoomManager();
 
-        StudyRoom privateRoom = new StudyRoom("Final Prep", 5, true, hashed);
-        StudyRoom publicRoom = new StudyRoom("Math Self Study", 3, false, null);
+        StudyRoom privateRoom = new StudyRoom("Final Prep", 5, 6000, true, hashed);
+        StudyRoom publicRoom = new StudyRoom("Math Self Study", 3, 7000, false, null);
 
         manager.addRoom(privateRoom);
         manager.addRoom(publicRoom);
