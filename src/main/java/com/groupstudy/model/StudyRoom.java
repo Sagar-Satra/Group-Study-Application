@@ -115,6 +115,15 @@ public class StudyRoom {
         System.out.println("Room " + roomId + " is now CLOSED.");
     }
     
+    public int getCurrentSize() {
+        return userStatusMap.size();
+    }
+    
+    public long getRemainingTime() {
+        long elapsed = System.currentTimeMillis() - startTime;
+        return Math.max(0, duration - elapsed);
+    }
+    
     // Add study time (called by timer)
     // deltaMillis = how much time passed since last update
     public void addStudyTime(User user, long deltaMillis) {

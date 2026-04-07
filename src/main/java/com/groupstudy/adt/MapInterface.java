@@ -32,4 +32,6 @@ public interface MapInterface<K, V> {
     void remove(K key);
     
     Iterable<K> keySet();
+    
+    int size();
 }
