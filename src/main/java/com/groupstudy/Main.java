@@ -23,9 +23,7 @@ public class Main {
 //    }
     
 	public static void main(String[] args) {
-        System.out.println("╔═══════════════════════════════════════════════╗");
-        System.out.println("║  Complete Integration Test - All 4 Tasks     ║");
-        System.out.println("╚═══════════════════════════════════════════════╝\n");
+        System.out.println("==========Complete Integration Test - All 4 Tasks==========");
         
         testTask6_PokemonEvolution();
         testTask8_TrophyBag();
@@ -33,9 +31,7 @@ public class Main {
         testTask10_Leaderboard();
         testIntegration();
         
-        System.out.println("\n╔═══════════════════════════════════════════════╗");
-        System.out.println("║  ✅ ALL TESTS PASSED!                         ║");
-        System.out.println("╚═══════════════════════════════════════════════╝");
+        System.out.println("============ALL TESTS PASSED!==============");
     }
     
     private static void testTask6_PokemonEvolution() {
@@ -52,7 +48,7 @@ public class Main {
         pokemon.addStudyTime(30);
         System.out.println("After 65 min total: " + pokemon.getCurrentName() + " (Stage " + pokemon.getCurrentStage() + ")");
         
-        System.out.println("✅ Task 6 Complete\n");
+        System.out.println("Task 6 Complete\n");
     }
     
     private static void testTask8_TrophyBag() {
@@ -77,7 +73,7 @@ public class Main {
             System.out.println("  " + (i+1) + ". " + all[i]);
         }
         
-        System.out.println("✅ Task 8 Complete\n");
+        System.out.println("Task 8 Complete\n");
     }
     
     private static void testTask9_Notifications() {
@@ -101,7 +97,7 @@ public class Main {
         }
         
         System.out.println("After processing: " + user.getPendingNotificationCount());
-        System.out.println("✅ Task 9 Complete\n");
+        System.out.println("Task 9 Complete\n");
     }
     
     private static void testTask10_Leaderboard() {
@@ -120,7 +116,7 @@ public class Main {
         }
         
         System.out.println("Sagar's rank: #" + leaderboard.getUserRank("Sagar"));
-        System.out.println("✅ Task 10 Complete\n");
+        System.out.println("Task 10 Complete\n");
     }
     
     private static void testIntegration() {
@@ -181,6 +177,6 @@ public class Main {
             System.out.println("   " + n);
         }
         
-        System.out.println("\n✅ Integration Complete!");
+        System.out.println("\nIntegration Complete!");
     }
 }

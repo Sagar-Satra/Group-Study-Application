@@ -1,5 +1,6 @@
 package com.groupstudy;
 
+import com.groupstudy.controller.LeaderboardController;
 import com.groupstudy.implementation.ArrayListImplementation;
 import com.groupstudy.model.StudyRoom;
 
@@ -38,13 +39,14 @@ public class LobbyUI extends Application {
         topBar.setStyle("-fx-background-color: #eeeeee;");
 
         Button profileBtn = new Button("👤");
+        Button leaderboardBtn = new Button("🏆"); 
         Button addBtn = new Button("➕");
         Button searchBtn = new Button("🔍");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        topBar.getChildren().addAll(profileBtn, spacer, addBtn, searchBtn);
+        topBar.getChildren().addAll(profileBtn, spacer, leaderboardBtn, addBtn, searchBtn);
         
         // ===== Room List =====
         roomList = new VBox();
@@ -92,6 +94,11 @@ public class LobbyUI extends Application {
         // ===== Button actions =====
         profileBtn.setOnAction(e -> {
             UserProfileUI.show(primaryStage);
+        });
+        
+        leaderboardBtn.setOnAction(e -> {
+            // need to replace user here
+            LeaderboardController.show(primaryStage, "Sagar");
         });
         
         addBtn.setOnAction(e -> {
