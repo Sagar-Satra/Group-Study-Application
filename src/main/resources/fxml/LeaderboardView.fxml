@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<?import javafx.scene.layout.*?>  
+<?import javafx.scene.control.*?>  
+<?import javafx.geometry.Insets?> 
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.groupstudy.controller.LeaderboardController"
+            stylesheets="@../css/leaderboard.css"
+            styleClass="leaderboard-root"> 
+            
+	<top>
+		<VBox styleClass="header" alignment="CENTER" spacing="10">
+            <padding><Insets top="15" right="10" bottom="15" left="10"/></padding>
+            
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button text="← Back" onAction="#onBack"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Global Leaderboard" styleClass="title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Region prefWidth="60"/>
+            </HBox>    
+                
+            <Label text="Ranked by Trophy Count" styleClass="subtitle"/>     
+        </VBox>     
+	</top>      
+	    
+	<center>   
+        <TableView fx:id="leaderboardTable" styleClass="leaderboard-table">     
+	        <columnResizePolicy>   
+	            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>   
+	        </columnResizePolicy>   
+            <columns>   
+                <TableColumn fx:id="rankColumn" text="Rank" prefWidth="80"/>   
+                <TableColumn fx:id="usernameColumn" text="Username" prefWidth="150"/>   
+                <TableColumn fx:id="trophyColumn" text="🏆 Trophies" prefWidth="100"/>   
+                <TableColumn fx:id="studyTimeColumn" text="⏰ Time" prefWidth="100"/>   
+            </columns>   
+        </TableView>     
+    </center>    
+    
+    <bottom>
+        <HBox styleClass="your-rank" alignment="CENTER" spacing="10">   
+             <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>   
+             <Label text="Your Rank:" styleClass="rank-label"/>   
+             <Label fx:id="userRankLabel" text="#--" styleClass="rank-value"/>   
+        </HBox>    
+    </bottom>     
+    
+</BorderPane>   
+	

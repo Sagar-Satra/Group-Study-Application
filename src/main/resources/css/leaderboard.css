@@ -1,0 +1,116 @@
+/*
+ * root background
+ * 
+ */
+.leaderboard-root {
+    -fx-background-color : #f5f5f5;  
+	}   
+  
+/* 
+ * header section   
+ * 
+ */
+.header {   
+    -fx-background-color :  #ffffff;   
+    -fx-padding : 15;   
+    -fx-effect :  dropshadow(gaussian, rgba(0,0,0,0.1) , 5, 0, 0, 2);  
+	}  
+  
+.title  {   
+    -fx-font-size :  20px;   
+    -fx-font-weight :  bold;    
+    -fx-text-fill :  #334;   
+    }
+
+.subtitle {  
+    -fx-font-size :  12px;
+    -fx-text-fill :  #667;
+    -fx-font-style :  italic;
+    }
+
+/* table styling
+ * 
+ */  
+.leaderboard-table {  
+    -fx-background-color : white; 
+    -fx-border-color : #ddd;
+    -fx-border-width : 1;
+}
+
+.leaderboard-table .column-header {   
+     -fx-background-color :  #2196F3;  
+     -fx-text-fill :  white;  
+     -fx-font-weight : bold;  
+     -fx-font-size : 13px;  
+     -fx-padding : 10;  
+	}
+  
+.leaderboard-table .column-header .label {  
+    -fx-text-fill :  white;  
+	}
+
+  
+.leaderboard-table .table-cell {  
+     -fx-padding :  10 5 10 5;  
+     -fx-font-size :  13px;  
+	}
+  
+.leaderboard-table .table-row-cell {  
+    -fx-background-color :  white;  
+	} 
+
+.leaderboard-table .table-row-cell:odd { 
+    -fx-background-color :  #f9f9f9;   
+	}
+
+.leaderboard-table .table-row-cell:hover {   
+    -fx-background-color :  #e3f2fd;     
+    -fx-cursor : hand;    
+	}	
+
+.leaderboard-table .table-row-cell:selected {  
+    -fx-background-color :  #bbdefb;  
+	}
+
+.leaderboard-table .table-row-cell:selected .table-cell {   
+    -fx-text-fill : black;   
+	}
+
+/* 
+ * bottom rank display
+ */
+.rank-label {   
+     -fx-font-size : 14px;    
+     -fx-text-fill : #667;  
+	}
+
+
+.rank-value {   
+     -fx-font-size : 18px;
+     -fx-font-weight : bold;
+     -fx-text-fill : #f44336;
+	}
+
+
+/* 
+ * buttons color
+ */
+.button {
+    -fx-background-color : #2196F3;   
+    -fx-text-fill : white;   
+    -fx-font-size : 13px;  
+    -fx-padding : 8 15 8 15;     
+    -fx-background-radius : 5;    
+    -fx-cursor : hand;    
+	-fx-min-width : 80;   
+}
+
+.button:hover {    
+    -fx-background-color : #1976D2;    
+}
+
+.button:pressed {    
+    -fx-background-color : #0D47A1;   
+}   
+
+
