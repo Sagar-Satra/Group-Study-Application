@@ -48,7 +48,7 @@ public class LeaderboardService {
 		return top;
 	}
 	
-	public int getUserRank(String username) {
+	public int getUserRankGlobally(String username) {
 		LeaderboardEntry[] array = listToArray();
         sorter.sort(array);
         
@@ -59,6 +59,17 @@ public class LeaderboardService {
         }
         
         return -1;
+	}
+	
+	public int getUserRankInRoom(StudyRoom room, String username) {
+		LeaderboardEntry[] roomLeaderBoard = getRoomLeaderBoard(room);
+		for(int i = 0; i < roomLeaderBoard.length; i++ ) {
+			if (roomLeaderBoard[i].getUserName().equals(username)) {
+				return i+1;
+				
+			}
+		}
+		return -1;
 	}
 	
 	
