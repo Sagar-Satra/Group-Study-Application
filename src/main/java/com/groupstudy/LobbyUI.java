@@ -3,6 +3,8 @@ package com.groupstudy;
 import com.groupstudy.controller.LeaderboardController;
 import com.groupstudy.implementation.ArrayListImplementation;
 import com.groupstudy.model.StudyRoom;
+import com.groupstudy.model.User;
+import com.groupstudy.ui.StudyRoomUI;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -138,13 +140,21 @@ public class LobbyUI extends Application {
             RoomCardUI card = new RoomCardUI(room);
 
             card.setOnMouseClicked(e -> {
-                System.out.println("Enter room: " + room.getTitle());
+            	// need to fix this with actual logged in user
+                User currentUser = new User("Sagar");
+                room.addUser(currentUser);
+                StudyRoomUI.show(getStage(), room, currentUser);
             });
 
             roomList.getChildren().add(card);
         }
     }
 
+    // helper method to get the stage (window)
+    private Stage getStage() {
+    		return (Stage) roomList.getScene().getWindow();
+    }
+    
     // remove rooms after delay
     private void cleanRooms() {
 

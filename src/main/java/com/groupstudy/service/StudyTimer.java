@@ -15,6 +15,9 @@ public class StudyTimer {
     // If the user has no interaction for 5 seconds, we consider them as STUDYING
     private static final long IDLE_THRESHOLD_MS = 5000;
 
+    // creating the NotificationService instance once for the entire class
+    private NotificationService notificationService = new NotificationService();
+    
     // Start the timer logic
     public void start(StudyRoom room) {
 
@@ -78,6 +81,9 @@ public class StudyTimer {
                     		
                     			if (user.getCurrentPokemon().createTrophy() != null) {
                     				user.addTrophy(user.getCurrentPokemon().createTrophy());
+                    				
+                    				// adding trophy notification to the user's notification queue
+                    				notificationService.addTrophy(user, user.getCurrentPokemon().getCurrentName());
                     			}
                     		}
                     	}
