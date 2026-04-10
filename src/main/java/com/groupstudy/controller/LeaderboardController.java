@@ -55,6 +55,7 @@ public class LeaderboardController {
     			// controller.leaderboardService = new LeaderboardService();
         		controller.leaderboardService = createTestLeaderboard();
 	    		if (room != null) {
+	    			System.out.println("inside the leadeboard controller");
 	    			controller.currentRoom = room;
 	    			// load room users data after every layout is set up
 	    			controller.loadRoomLeaderboardData(room);
@@ -66,6 +67,7 @@ public class LeaderboardController {
 	        		stage.setTitle("Global Leaderboard");
 	    		}
 	    		stage.setScene(scene);
+	    		stage.show();
 	    	} catch (Exception e) {
 	    		e.printStackTrace();
 	    		System.err.println("Error loading leaderboard: " + e.getMessage());
@@ -138,7 +140,7 @@ public class LeaderboardController {
     
     
     /**
-     * below method fetches data from leaderboard service and populate table for Global leaderboard
+     * below method fetches data from leaderboard service and populate table for room leaderboard
      */
     private void loadRoomLeaderboardData(StudyRoom room) {
 	    	// get all entries which are sorted in descending order
