@@ -23,8 +23,14 @@ public class NotificationService {
         user.addNotification(new Notification(message, NotificationType.RANK_TOP));
     }
     
+    public void addSessionEnd(User user, int studyMinutes) {
+    	String message = String.format("⏳ Session ended! Total study time: %d minutes", studyMinutes);
+        user.addNotification(new Notification(message, NotificationType.SESSION_END));
+    }
+    
     // wrapper method around user.clearNotifications() in user.java
     public void clearOnRoomExit(User user) {
         user.clearNotifications();
     }
+     
 }

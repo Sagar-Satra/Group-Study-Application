@@ -98,7 +98,7 @@ public class StudyRoomUI extends BorderPane{
 	private void setupUI() {
 		// first set the background color and styling 
 		setStyle("-fx-background-color: #f5f5f5;");
-		setPadding(new Insets(20));
+		setPadding(new Insets(10));
 		
 		// now build sections top, center and bottom
 		setTop(createTopSection());
@@ -110,14 +110,14 @@ public class StudyRoomUI extends BorderPane{
 	private VBox createTopSection() {
 		VBox topBox = new VBox(15);
 		topBox.setAlignment(Pos.CENTER);
-		topBox.setPadding(new Insets(0,0,20,0));
+		topBox.setPadding(new Insets(0,0,10,0));
 		
 		// header row container - leave room button, title of room and timer
 		HBox headerRow = new HBox();
 		headerRow.setAlignment(Pos.CENTER);
 		
 		// leave button - placed left
-		leaveButton = new Button("⬅️ Leave");
+		leaveButton = new Button("⬅Leave");
 		leaveButton.setFont(Font.font("Arial", FontWeight.NORMAL, 14));
         leaveButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; " +
                            "-fx-padding: 8 16; -fx-cursor: hand; -fx-background-radius: 5;");
@@ -152,9 +152,9 @@ public class StudyRoomUI extends BorderPane{
 	
 	// centre section
 	private VBox createCenterSection() {
-		VBox centerBox = new VBox(25);
+		VBox centerBox = new VBox(10);
 		centerBox.setAlignment(Pos.CENTER);
-		centerBox.setPadding(new Insets(30,20,30,20));
+		centerBox.setPadding(new Insets(10,20,10,20));
 		
 		// main user's pokemon display card
 		VBox myPokemonCard = createPokemonDisplay();
@@ -163,11 +163,11 @@ public class StudyRoomUI extends BorderPane{
 	} 
 	
 	private VBox createPokemonDisplay() {
-		VBox card = new VBox(20);
+		VBox card = new VBox(10);
 		card.setAlignment(Pos.CENTER);
 		card.setStyle("-fx-background-color: white; -fx-background-radius: 15; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);");
-		card.setPadding(new Insets(30));
+		card.setPadding(new Insets(15));
 		card.setMaxWidth(500);
 		
 		// title of pokemon
@@ -177,8 +177,8 @@ public class StudyRoomUI extends BorderPane{
 		
 		// adding space for pokemon image
 		myPokemonImageView = new ImageView();
-		myPokemonImageView.setFitWidth(200);
-		myPokemonImageView.setFitHeight(200);
+		myPokemonImageView.setFitWidth(100);
+		myPokemonImageView.setFitHeight(100);
 		myPokemonImageView.setPreserveRatio(true);
 		// placing actual image
 		updatePokemonImage();
@@ -248,9 +248,9 @@ public class StudyRoomUI extends BorderPane{
 	
 	// bottom section to view other participants and room leaderboard
 	private VBox createBottomSection() {
-		VBox bottomBox = new VBox(20);
+		VBox bottomBox = new VBox(10);
 		bottomBox.setAlignment(Pos.CENTER);
-		bottomBox.setPadding(new Insets(20,0,0,0));
+		bottomBox.setPadding(new Insets(10,0,0,0));
 		
 		// separator
 		Separator separator = new Separator();
@@ -330,6 +330,11 @@ public class StudyRoomUI extends BorderPane{
 						
 						// check leaderboard position
 						checkLeaderboardPosition();
+						
+						// show any pending notifications
+						if (currentUser.hasPendingNotifications()) {
+							NotificationPopup.showNext(getStage(), currentUser);
+						}
 					}
 				})
 		);
@@ -407,7 +412,7 @@ public class StudyRoomUI extends BorderPane{
         
         // Check if reached top position
         if (currentPosition == 1 && previousLeaderboardPosition != 1) {
-            NotificationPopup.showLeaderTop(getStage());
+            notificationService.addRankTop(currentUser);
         }
         
         previousLeaderboardPosition = currentPosition;
@@ -416,6 +421,7 @@ public class StudyRoomUI extends BorderPane{
 	// method to show room leaderboard popup
 	private void showRoomLeaderboard() {
 		Stage roomLeaderBoardPopup = new Stage();
+		System.out.println("inside leaderboard method");
 		LeaderboardController.show(roomLeaderBoardPopup, currentUser.getName(), room);
 	}
 	
@@ -442,6 +448,8 @@ public class StudyRoomUI extends BorderPane{
 	private void handleLeave() {
 		// stop UI timer for the current user when left
 		if (studyTimer != null) studyTimer.stop();
+		// clear all notifications on leaving
+		notificationService.clearOnRoomExit(currentUser);
 		room.removeUser(currentUser);
 		LobbyUI.show((Stage) getScene().getWindow());
 	}
@@ -452,10 +460,19 @@ public class StudyRoomUI extends BorderPane{
 		if (studyTimer != null) studyTimer.stop();
 		if (roomTimer != null) roomTimer.stop();
 		
-		// show session end notification
-		NotificationPopup.showSessionEnd(getStage(), studyMinutes);
+		// add notification to queue
+		notificationService.addSessionEnd(currentUser, studyMinutes);
+		// show this notification immediately
+		NotificationPopup.showNext(getStage(), currentUser);
+		
+		// now clear all notifications
+		notificationService.clearOnRoomExit(currentUser);
+		
 		// close the room
 		room.endSession();
+		
+		// go back to lobby
+		LobbyUI.show(getStage());
 		
 	}
 	
@@ -476,7 +493,7 @@ public class StudyRoomUI extends BorderPane{
 	// show method which calls the entire UI build methods
 	public static void show(Stage stage, StudyRoom room, User user) {
         StudyRoomUI studyRoomUI = new StudyRoomUI(room, user);
-        Scene scene = new Scene(studyRoomUI, 800, 900);
+        Scene scene = new Scene(studyRoomUI, 700, 800);
         stage.setScene(scene);
         stage.setTitle("Study Room - " + room.getTitle());
     }

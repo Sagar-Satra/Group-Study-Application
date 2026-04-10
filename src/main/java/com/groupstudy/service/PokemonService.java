@@ -28,21 +28,21 @@ public class PokemonService {
     };
 
 	private static final String[][] IMAGE_PATHS = {
-	    {"charmander.png", "charmeleon.png", "charizard.png"},
-	    {"bulbasaur.png", "ivysaur.png", "venusaur.png"},
-	    {"squirtle.png", "wartortle.png", "blastoise.png"},
-	    {"pikachu.png", "raichu.png", "raichu-alolan.png"},
-	    {"caterpie.png", "metapod.png", "butterfree.png"},
-	    {"pidgey.png", "pidgeotto.png", "pidgeot.png"},
-	    {"geodude.png", "graveler.png", "golem.png"},
-	    {"abra.png", "kadabra.png", "alakazam.png"},
-	    {"magikarp.png", "gyarados.png", "mega-gyarados.png"},
-	    {"dratini.png", "dragonair.png", "dragonite.png"},
-	    {"chikorita.png", "bayleef.png", "meganium.png"},
-	    {"weedle.png", "kakuna.png", "beedrill.png"},
-	    {"cyndaquil.png", "quilava.png", "typhlosion.png"},
-	    {"nidoran-f.png", "nidorina.png", "nidoqueen.png"},
-	    {"nidoran-m.png", "nidorino.png", "nidoking.png"}
+	    {"/images/charmander.png", "/images/charmeleon.png", "/images/charizard.png"},
+	    {"/images/bulbasaur.png", "/images/ivysaur.png", "/images/venusaur.png"},
+	    {"/images/squirtle.png", "/images/wartortle.png", "/images/blastoise.png"},
+	    {"/images/pikachu.png", "/images/raichu.png", "/images/raichu-alolan.png"},
+	    {"/images/caterpie.png", "/images/metapod.png", "/images/butterfree.png"},
+	    {"/images/pidgey.png", "/images/pidgeotto.png", "/images/pidgeot.png"},
+	    {"/images/geodude.png", "/images/graveler.png", "/images/golem.png"},
+	    {"/images/abra.png", "/images/kadabra.png", "/images/alakazam.png"},
+	    {"/images/magikarp.png", "/images/gyarados.png", "/images/mega-gyarados.png"},
+	    {"/images/dratini.png", "/images/dragonair.png", "/images/dragonite.png"},
+	    {"/images/chikorita.png", "/images/bayleef.png", "/images/meganium.png"},
+	    {"/images/weedle.png", "/images/kakuna.png", "/images/beedrill.png"},
+	    {"/images/cyndaquil.png", "/images/quilava.png", "/images/typhlosion.png"},
+	    {"/images/nidoran-f.png", "/images/nidorina.png", "/images/nidoqueen.png"},
+	    {"/images/nidoran-m.png", "/images/nidorino.png", "/images/nidoking.png"}
 	};
     
     public PokemonService() {
