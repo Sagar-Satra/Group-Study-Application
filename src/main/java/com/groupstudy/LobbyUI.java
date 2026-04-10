@@ -3,8 +3,11 @@ package com.groupstudy;
 import com.groupstudy.controller.LeaderboardController;
 import com.groupstudy.implementation.ArrayListImplementation;
 import com.groupstudy.model.StudyRoom;
+import com.groupstudy.model.Trophy;
 import com.groupstudy.model.User;
+import com.groupstudy.service.PokemonService;
 import com.groupstudy.ui.StudyRoomUI;
+import com.groupstudy.ui.TrophyCollectionUI;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -41,14 +44,15 @@ public class LobbyUI extends Application {
         topBar.setStyle("-fx-background-color: #eeeeee;");
 
         Button profileBtn = new Button("👤");
-        Button leaderboardBtn = new Button("🏆"); 
+        Button trophyBtn = new Button("🏆");
+        Button leaderboardBtn = new Button("🥇"); 
         Button addBtn = new Button("➕");
         Button searchBtn = new Button("🔍");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        topBar.getChildren().addAll(profileBtn, spacer, leaderboardBtn, addBtn, searchBtn);
+        topBar.getChildren().addAll(profileBtn, spacer, leaderboardBtn, trophyBtn, addBtn, searchBtn);
         
         // ===== Room List =====
         roomList = new VBox();
@@ -98,6 +102,18 @@ public class LobbyUI extends Application {
             UserProfileUI.show(primaryStage);
         });
         
+        // view trophies action button
+        trophyBtn.setOnAction(e -> {
+            User testUser = new User("Sagar");
+            // Add some test trophies
+            testUser.addTrophy(new Trophy("Charizard", "/images/charizard.png", 3, 60));
+            testUser.addTrophy(new Trophy("Blastoise", "/images/blastoise.png", 3, 65));
+            testUser.addTrophy(new Trophy("Venusaur", "/images/venusaur.png", 3, 70));
+            
+            TrophyCollectionUI.show(primaryStage, testUser);
+        });
+        
+        // view leaderboard action button
         leaderboardBtn.setOnAction(e -> {
             // need to replace user here with the actual logged in user
             LeaderboardController.show(primaryStage, "Sagar", null);
@@ -143,6 +159,19 @@ public class LobbyUI extends Application {
             	// need to fix this with actual logged in user
                 User currentUser = new User("Sagar");
                 room.addUser(currentUser);
+                
+                // dummy users to test the UI
+                // Add dummy users for testing
+                User dummy1 = new User("Aditya");
+                User dummy2 = new User("Yuxuan");
+                
+                // Assign them Pokemon
+                PokemonService pokemonService = new PokemonService();
+                dummy1.setCurrentPokemon(pokemonService.assignRandomPokemon());
+                dummy2.setCurrentPokemon(pokemonService.assignRandomPokemon());
+                
+                room.addUser(dummy1);
+                room.addUser(dummy2);
                 StudyRoomUI.show(getStage(), room, currentUser);
             });
 
