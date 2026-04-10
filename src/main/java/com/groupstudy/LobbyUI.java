@@ -97,8 +97,8 @@ public class LobbyUI extends Application {
         });
         
         leaderboardBtn.setOnAction(e -> {
-            // need to replace user here
-            LeaderboardController.show(primaryStage, "Sagar");
+            // need to replace user here with the actual logged in user
+            LeaderboardController.show(primaryStage, "Sagar", null);
         });
         
         addBtn.setOnAction(e -> {

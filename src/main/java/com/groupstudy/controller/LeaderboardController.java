@@ -2,6 +2,7 @@ package com.groupstudy.controller;
 
 import com.groupstudy.LobbyUI;
 import com.groupstudy.model.LeaderboardEntry;
+import com.groupstudy.model.StudyRoom;
 import com.groupstudy.service.LeaderboardService;
 
 import javafx.beans.property.SimpleIntegerProperty;
@@ -30,6 +31,7 @@ public class LeaderboardController {
     private Stage stage;
     private LeaderboardService leaderboardService;
     private String currentUsername;
+    private StudyRoom currentRoom;
     
     
     /**
@@ -37,27 +39,37 @@ public class LeaderboardController {
      * called from lobbyUI when user clicks trophy button
      * 
      */
-    public static void show(Stage stage, String username) {
-    	try {
-    		FXMLLoader loader = new FXMLLoader(
-    				LeaderboardController.class.getResource("/fxml/LeaderboardView.fxml"));
-    		// puts loaded UI into the scene(canvas) with Load FXML, create controller and call initialize()
-    		Scene scene = new Scene(loader.load(), 400,600);
-    		
-    		// gets the instance of the controller, which was created automatically
-    		LeaderboardController controller = loader.getController();
-    		controller.stage = stage;
-    		controller.currentUsername = username;
-    		// controller.leaderboardService = new LeaderboardService();
-    		controller.leaderboardService = createTestLeaderboard();
-    		
-    		// load data after every layout is set up
-    		controller.loadLeaderboardData();
-    		stage.setScene(scene);
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    		System.err.println("Error loading leaderboard: " + e.getMessage());
-    	}
+    public static void show(Stage stage, String username, StudyRoom room) {
+	    	try {
+	    		FXMLLoader loader = new FXMLLoader(
+	    				LeaderboardController.class.getResource("/fxml/LeaderboardView.fxml"));
+	    		// puts loaded UI into the scene(canvas) with Load FXML, create controller and call initialize()
+	    		Scene scene = new Scene(loader.load(), 400,600);
+	    		
+	    		// gets the instance of the controller, which was created automatically
+	    		LeaderboardController controller = loader.getController();
+	    		controller.stage = stage;
+	    		controller.currentUsername = username;
+	    		
+	    		// creating the leaderboardService to get the data
+    			// controller.leaderboardService = new LeaderboardService();
+        		controller.leaderboardService = createTestLeaderboard();
+	    		if (room != null) {
+	    			controller.currentRoom = room;
+	    			// load room users data after every layout is set up
+	    			controller.loadRoomLeaderboardData(room);
+	    			stage.setTitle("Room Leaderboard - " + room.getTitle());
+	    		} else {
+	    			controller.currentRoom = null;
+	        		// load global users data after every layout is set up
+	        		controller.loadGlobalLeaderboardData();
+	        		stage.setTitle("Global Leaderboard");
+	    		}
+	    		stage.setScene(scene);
+	    	} catch (Exception e) {
+	    		e.printStackTrace();
+	    		System.err.println("Error loading leaderboard: " + e.getMessage());
+	    	}
     }
     
     /**
@@ -102,39 +114,72 @@ public class LeaderboardController {
 
     
     /**
-     * below method fetches data from service and populate table
+     * below method fetches data from leaderboard service and populate table for Global leaderboard
      */
-    private void loadLeaderboardData() {
-    	// get all entries which are sorted in descending order
-    	LeaderboardEntry[] entries = leaderboardService.getAllEntries();
-    	
-    	// need to create observable list for JavaFX table 
-    	ObservableList<LeaderboardRow> rows = FXCollections.observableArrayList();
-    	
-    	// convert entries into table rows
-    	for (int i=0; i < entries.length; i++) {
-    		LeaderboardEntry entry = entries[i];
-    		LeaderboardRow row = new LeaderboardRow(i+1, entry.getUserName(), entry.getTrophyCount(), entry.getStudyMinutes());
-    		rows.add(row);
-    	}
-    	
-    	// set data to table
-    	leaderboardTable.setItems(rows);
-    	//display current user's rank
-    	displayUserRank();
+    private void loadGlobalLeaderboardData() {
+	    	// get all entries which are sorted in descending order
+	    	LeaderboardEntry[] entries = leaderboardService.getAllEntries();
+	    	
+	    	// need to create observable list for JavaFX table 
+	    	ObservableList<LeaderboardRow> rows = FXCollections.observableArrayList();
+	    	
+	    	// convert entries into table rows
+	    	for (int i=0; i < entries.length; i++) {
+	    		LeaderboardEntry entry = entries[i];
+	    		LeaderboardRow row = new LeaderboardRow(i+1, entry.getUserName(), entry.getTrophyCount(), entry.getStudyMinutes());
+	    		rows.add(row);
+	    	}
+	    	
+	    	// set data to table
+	    	leaderboardTable.setItems(rows);
+	    	//display current user's rank
+	    	displayUserRank();
     }
+    
+    
+    /**
+     * below method fetches data from leaderboard service and populate table for Global leaderboard
+     */
+    private void loadRoomLeaderboardData(StudyRoom room) {
+	    	// get all entries which are sorted in descending order
+	    	LeaderboardEntry[] entries = leaderboardService.getRoomLeaderBoard(room);
+	    	
+	    	// need to create observable list for JavaFX table 
+	    	ObservableList<LeaderboardRow> rows = FXCollections.observableArrayList();
+	    	
+	    	// convert entries into table rows
+	    	for (int i=0; i < entries.length; i++) {
+	    		LeaderboardEntry entry = entries[i];
+	    		LeaderboardRow row = new LeaderboardRow(i+1, entry.getUserName(), entry.getTrophyCount(), entry.getStudyMinutes());
+	    		rows.add(row);
+	    	}
+	    	
+	    	// set data to table
+	    	leaderboardTable.setItems(rows);
+	    	//display current user's rank
+	    	displayUserRank();
+    }
+    
     
     /**
      * find and display current user's rank
      */
     private void displayUserRank() {
-    	int rank = leaderboardService.getUserRank(currentUsername);
-    	if (rank == -1) {
-            userRankLabel.setText("Not Ranked");
-           
-        } else {
-            userRankLabel.setText("#" + rank);
-        }
+	    	int rank;
+	    	
+	    	if (currentRoom != null) {
+	    		// get current user rank in the current room 
+	    		rank = leaderboardService.getUserRankInRoom(currentRoom, currentUsername);
+	    	} else {
+	    		// get current user rank globally
+	    		rank = leaderboardService.getUserRankGlobally(currentUsername);
+	    	}
+    
+	    	if (rank == -1) {
+	        userRankLabel.setText("Not Ranked");
+	    } else {
+	        userRankLabel.setText("#" + rank);
+	    }
     }
     
     /**
@@ -143,7 +188,13 @@ public class LeaderboardController {
      */
     @FXML
     private void onBack() {
-        LobbyUI.show(stage);
+	    	if (currentRoom != null) {
+	    		// for room leaderboard back action, close the popup
+	    		stage.close();
+	    	} else {
+	    		// for global LB, go back to lobby
+	    		LobbyUI.show(stage);
+	    	}   
     }
     
     /**

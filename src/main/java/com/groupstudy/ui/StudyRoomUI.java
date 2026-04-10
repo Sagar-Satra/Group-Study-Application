@@ -1,6 +1,7 @@
 package com.groupstudy.ui;
 
 import com.groupstudy.LobbyUI;
+import com.groupstudy.controller.LeaderboardController;
 import com.groupstudy.model.Pokemon;
 import com.groupstudy.model.RoomStatus;
 import com.groupstudy.model.StudyRoom;
@@ -311,7 +312,7 @@ public class StudyRoomUI extends BorderPane{
 	}
 	
 	
-	// private methods to do process the data 
+	// private methods to process the data 
 	
 	// method to get current user's study time and update pokemon, other users, and leaderboard
 	private void showUserStudyTimer() {
@@ -402,7 +403,7 @@ public class StudyRoomUI extends BorderPane{
 	
 	// method to display notification if the user reaches the top position
 	private void checkLeaderboardPosition() {
-        int currentPosition = leaderboardService.getUserPositionInRoom(room, currentUser);
+        int currentPosition = leaderboardService.getUserRankInRoom(room, currentUser.getName());
         
         // Check if reached top position
         if (currentPosition == 1 && previousLeaderboardPosition != 1) {
@@ -412,9 +413,14 @@ public class StudyRoomUI extends BorderPane{
         previousLeaderboardPosition = currentPosition;
     }
 	
+	// method to show room leaderboard popup
+	private void showRoomLeaderboard() {
+		Stage roomLeaderBoardPopup = new Stage();
+		LeaderboardController.show(roomLeaderBoardPopup, currentUser.getName(), room);
+	}
 	
 	// below are the event handlers
-	// 
+	// method to handle break event
 	private void handleBreak() {
 		if (!onBreak) {
 			onBreak = true;
@@ -432,7 +438,7 @@ public class StudyRoomUI extends BorderPane{
 		}
 	}
 	
-	// leave button logic
+	// leave event logic
 	private void handleLeave() {
 		// stop UI timer for the current user when left
 		if (studyTimer != null) studyTimer.stop();
@@ -475,10 +481,5 @@ public class StudyRoomUI extends BorderPane{
         stage.setTitle("Study Room - " + room.getTitle());
     }
 	
-	
-	
-	
-	
-	
-	
+
 }

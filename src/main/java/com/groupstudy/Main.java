@@ -115,7 +115,7 @@ public class Main {
             System.out.println("  " + (i+1) + ". " + top3[i]);
         }
         
-        System.out.println("Sagar's rank: #" + leaderboard.getUserRank("Sagar"));
+        System.out.println("Sagar's rank: #" + leaderboard.getUserRankGlobally("Sagar"));
         System.out.println("Task 10 Complete\n");
     }
     
@@ -168,7 +168,7 @@ public class Main {
             user.getCurrentStreak()
         ));
         System.out.println("DEBUG: Leaderboard size = " + leaderboard.getSize());
-        System.out.println("6. Leaderboard rank: #" + leaderboard.getUserRank(user.getName()));
+        System.out.println("6. Leaderboard rank: #" + leaderboard.getUserRankGlobally(user.getName()));
         
         // Process notifications
         System.out.println("\n7. Processing notifications:");
