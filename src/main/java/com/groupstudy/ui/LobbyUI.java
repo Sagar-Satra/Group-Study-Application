@@ -1,4 +1,4 @@
-package com.groupstudy;
+package com.groupstudy.ui;
 
 import com.groupstudy.controller.LeaderboardController;
 import com.groupstudy.implementation.ArrayListImplementation;
@@ -6,8 +6,6 @@ import com.groupstudy.model.StudyRoom;
 import com.groupstudy.model.Trophy;
 import com.groupstudy.model.User;
 import com.groupstudy.service.PokemonService;
-import com.groupstudy.ui.StudyRoomUI;
-import com.groupstudy.ui.TrophyCollectionUI;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
