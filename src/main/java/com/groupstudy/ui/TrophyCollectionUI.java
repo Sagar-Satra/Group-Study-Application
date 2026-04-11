@@ -134,12 +134,12 @@ public class TrophyCollectionUI {
         card.setStyle("-fx-background-color: white; -fx-background-radius: 10; " +
                      "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);");
         card.setPadding(new Insets(12));
-        card.setMaxWidth(120);
+        card.setMaxWidth(150);
         
         // getting the image of pokemon
         ImageView trophyImage = new ImageView();
-        trophyImage.setFitWidth(70);
-        trophyImage.setFitHeight(70);
+        trophyImage.setFitWidth(100);
+        trophyImage.setFitHeight(100);
         trophyImage.setPreserveRatio(true);
         
         try {

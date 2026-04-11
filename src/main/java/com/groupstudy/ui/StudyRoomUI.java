@@ -34,6 +34,7 @@ public class StudyRoomUI extends BorderPane{
 	private StudyRoom room; 
 	private User currentUser; 
 	private Pokemon myPokemon;
+	private Stage stage;
 	
 	// getting services
 	private LeaderboardService leaderboardService;
@@ -312,7 +313,6 @@ public class StudyRoomUI extends BorderPane{
 	
 	
 	// private methods to process the data 
-	
 	// method to get current user's study time and update pokemon, other users, and leaderboard
 	private void showUserStudyTimer() {
 		studyTimer = new Timeline(
@@ -421,7 +421,6 @@ public class StudyRoomUI extends BorderPane{
 	// method to show room leaderboard popup
 	private void showRoomLeaderboard() {
 		Stage roomLeaderBoardPopup = new Stage();
-		System.out.println("inside leaderboard method");
 		LeaderboardController.show(roomLeaderBoardPopup, currentUser.getName(), room);
 	}
 	
@@ -448,10 +447,12 @@ public class StudyRoomUI extends BorderPane{
 	private void handleLeave() {
 		// stop UI timer for the current user when left
 		if (studyTimer != null) studyTimer.stop();
+		if (roomTimer != null) roomTimer.stop();
+		
 		// clear all notifications on leaving
 		notificationService.clearOnRoomExit(currentUser);
 		room.removeUser(currentUser);
-		LobbyUI.show((Stage) getScene().getWindow());
+		LobbyUI.show(getStage());
 	}
 	
 	// when the room time ends logic
@@ -463,23 +464,18 @@ public class StudyRoomUI extends BorderPane{
 		// add notification to queue
 		notificationService.addSessionEnd(currentUser, studyMinutes);
 		// show this notification immediately
-		// ============================================= uncomment this later
+		// ============================================= uncomment below later
 		// NotificationPopup.showNext(getStage(), currentUser);
 		
 		// now clear all notifications
 		notificationService.clearOnRoomExit(currentUser);
-		
-		// close the room
-		room.endSession();
-		
 		// go back to lobby
 		LobbyUI.show(getStage());
-		
 	}
 	
 	// get the original stage to go back to lobby ui
 	private Stage getStage() {
-        return (Stage) getScene().getWindow();
+        return stage;
     }
 	
 	//format the time
@@ -494,6 +490,7 @@ public class StudyRoomUI extends BorderPane{
 	// show method which calls the entire UI build methods
 	public static void show(Stage stage, StudyRoom room, User user) {
         StudyRoomUI studyRoomUI = new StudyRoomUI(room, user);
+        studyRoomUI.stage = stage;
         Scene scene = new Scene(studyRoomUI, 800, 800);
         stage.setScene(scene);
         stage.setTitle("Study Room - " + room.getTitle());
