@@ -59,8 +59,6 @@ public class LobbyUI extends Application {
         roomList.setPadding(new Insets(20));
 
         // ===== Data =====
-        rooms = new ArrayListImplementation<>();
-
         if (rooms.getLength() == 0) {
 
             // public rooms
