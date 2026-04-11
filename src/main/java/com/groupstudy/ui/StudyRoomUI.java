@@ -399,7 +399,8 @@ public class StudyRoomUI extends BorderPane{
 		// get the other users name currently in the room - exclude current user
 		for (User user : room.getAllStatus().keySet()) {
             if (!user.equals(currentUser)) {
-                ParticipantCardUI card = new ParticipantCardUI(user);
+            	RoomStatus status = room.getStatus(user);
+            	ParticipantCardUI card = new ParticipantCardUI(user, status);
                 participantsContainer.getChildren().add(card);
             }
         }	
