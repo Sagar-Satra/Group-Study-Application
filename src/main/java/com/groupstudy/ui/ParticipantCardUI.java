@@ -1,6 +1,7 @@
 package com.groupstudy.ui;
 
 import com.groupstudy.model.Pokemon;
+import com.groupstudy.model.RoomStatus;
 import com.groupstudy.model.User;
 
 import javafx.geometry.Insets;
@@ -18,10 +19,13 @@ public class ParticipantCardUI extends VBox {
 	private User user;
 	private ImageView pokemonImageView;
 	private Label usernameLabel;
+	private Label statusLabel;
+	private RoomStatus status;
 	
-	public ParticipantCardUI(User user) {
-		this.user = user;
-		setupUI();
+	public ParticipantCardUI(User user, RoomStatus status) {
+	    this.user = user;
+	    this.status = status;
+	    setupUI();
 	}
 	
 	private void setupUI() {
@@ -58,9 +62,31 @@ public class ParticipantCardUI extends VBox {
 	    usernameLabel.setWrapText(false);
 	    usernameLabel.setAlignment(Pos.CENTER);
 	    
-	    this.getChildren().addAll(pokemonImageView, usernameLabel);
+	    statusLabel = new Label(getStatusText(status));
+	    statusLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 10));
+	    statusLabel.setTextFill(getStatusColor(status));
+
+	    this.getChildren().addAll(pokemonImageView, usernameLabel, statusLabel);
 	}
 	
-	
+	private String getStatusText(RoomStatus status) {
+	    switch (status) {
+	        case STUDYING: return "🟢 Studying";
+	        case BREAK: return "🟡 Break";
+	        case LEFT: return "🔴 Left";
+	        case SESSION_ENDED: return "⚫ Ended";
+	        default: return "";
+	    }
+	}
+
+	private Color getStatusColor(RoomStatus status) {
+	    switch (status) {
+	        case STUDYING: return Color.GREEN;
+	        case BREAK: return Color.ORANGE;
+	        case LEFT: return Color.RED;
+	        case SESSION_ENDED: return Color.GRAY;
+	        default: return Color.BLACK;
+	    }
+	}
 	
 }
