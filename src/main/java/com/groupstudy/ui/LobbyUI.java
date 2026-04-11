@@ -5,6 +5,7 @@ import com.groupstudy.implementation.ArrayListImplementation;
 import com.groupstudy.model.StudyRoom;
 import com.groupstudy.model.Trophy;
 import com.groupstudy.model.User;
+import com.groupstudy.service.AuthService;
 import com.groupstudy.service.PokemonService;
 
 import javafx.animation.KeyFrame;
@@ -24,7 +25,7 @@ import javafx.util.Duration;
 public class LobbyUI extends Application {
 
     // store rooms
-    private static ArrayListImplementation<StudyRoom> rooms = new ArrayListImplementation<>();
+    public static ArrayListImplementation<StudyRoom> rooms = new ArrayListImplementation<>();
 
     // UI container for room cards
     private VBox roomList;
@@ -61,11 +62,20 @@ public class LobbyUI extends Application {
         rooms = new ArrayListImplementation<>();
 
         if (rooms.getLength() == 0) {
-            StudyRoom room1 = new StudyRoom("Final Prep", 5, 10000, false, null);
-            StudyRoom room2 = new StudyRoom("Math Study", 4, 15000, false, null);
+
+            // public rooms
+            StudyRoom room1 = new StudyRoom("Final Prep", 5, 100000, false, null);
+            StudyRoom room2 = new StudyRoom("Math Study", 4, 150000, false, null);
+
+            // private rooms
+            AuthService auth = new AuthService();
+            StudyRoom room3 = new StudyRoom("Secret Room", 3, 200000, true, auth.hashPassword("123"));
+            StudyRoom room4 = new StudyRoom("Hidden Study", 2, 200000, true, auth.hashPassword("abc"));
 
             rooms.add(room1);
             rooms.add(room2);
+            rooms.add(room3);
+            rooms.add(room4);
         }
 
         // ===== Initial render =====
@@ -142,6 +152,10 @@ public class LobbyUI extends Application {
         app.start(stage);
     }
     
+    public static ArrayListImplementation<StudyRoom> getRooms() {
+        return rooms;
+    }
+    
     // rebuild room cards UI
     private void refreshRoomList() {
 
@@ -173,7 +187,9 @@ public class LobbyUI extends Application {
                 StudyRoomUI.show(getStage(), room, currentUser);
             });
 
-            roomList.getChildren().add(card);
+            if (!room.isPrivate()) {
+                roomList.getChildren().add(card);
+            }
         }
     }
 
