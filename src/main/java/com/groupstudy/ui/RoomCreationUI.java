@@ -1,4 +1,4 @@
-package com.groupstudy;
+package com.groupstudy.ui;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

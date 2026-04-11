@@ -1,6 +1,5 @@
 package com.groupstudy.ui;
 
-import com.groupstudy.LobbyUI;
 import com.groupstudy.model.Trophy;
 import com.groupstudy.model.User;
 

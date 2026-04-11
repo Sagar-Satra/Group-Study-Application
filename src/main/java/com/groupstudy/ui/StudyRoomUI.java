@@ -1,6 +1,5 @@
 package com.groupstudy.ui;
 
-import com.groupstudy.LobbyUI;
 import com.groupstudy.controller.LeaderboardController;
 import com.groupstudy.model.Pokemon;
 import com.groupstudy.model.RoomStatus;

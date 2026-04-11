@@ -1,9 +1,9 @@
 package com.groupstudy.controller;
 
-import com.groupstudy.LobbyUI;
 import com.groupstudy.model.LeaderboardEntry;
 import com.groupstudy.model.StudyRoom;
 import com.groupstudy.service.LeaderboardService;
+import com.groupstudy.ui.LobbyUI;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
