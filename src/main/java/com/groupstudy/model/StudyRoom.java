@@ -24,7 +24,6 @@ public class StudyRoom {
     private boolean isClosed = false;
     private boolean isPrivate;
     private String passwordHash; // Only use for private room
-    private User admin; // The user who created this room
     
     public StudyRoom(String title, int capacity, long duration, boolean isPrivate, String passwordHash) {
     	this.roomId = generateRoomId();
@@ -34,21 +33,6 @@ public class StudyRoom {
     	this.duration = duration;
     	this.isPrivate = isPrivate; 
     	this.passwordHash = passwordHash;
-    	this.admin = null;
-    }
-    
-    /**
-     * Constructor with admin - the user who creates the room becomes admin.
-     */
-    public StudyRoom(String title, int capacity, long duration, boolean isPrivate, String passwordHash, User admin) {
-    	this.roomId = generateRoomId();
-    	this.title = title; 
-    	this.capacity = capacity;
-    	this.startTime = System.currentTimeMillis();
-    	this.duration = duration;
-    	this.isPrivate = isPrivate; 
-    	this.passwordHash = passwordHash;
-    	this.admin = admin;
     }
 
     // Add a user to the room
@@ -179,73 +163,5 @@ public class StudyRoom {
     public boolean verifyPassword(String inputPassword, com.groupstudy.service.AuthService auth) {
     	if(!isPrivate) return true; // public room no need password
     	return auth.verifyPassword(inputPassword, passwordHash);
-    }
-    
-    // ===== Admin Methods =====
-    
-    /**
-     * Returns the admin (creator) of this room.
-     */
-    public User getAdmin() {
-    	return admin;
-    }
-    
-    /**
-     * Sets the admin of this room.
-     */
-    public void setAdmin(User admin) {
-    	this.admin = admin;
-    }
-    
-    /**
-     * Checks if a given user is the admin of this room.
-     */
-    public boolean isAdmin(User user) {
-    	if (admin == null || user == null) return false;
-    	return admin.equals(user);
-    }
-    
-    /**
-     * Admin-only: update the session timer duration.
-     * Only the admin can change the timer.
-     */
-    public boolean updateDuration(User user, long newDuration) {
-    	if (!isAdmin(user)) {
-    		System.out.println("Only the admin can change the timer.");
-    		return false;
-    	}
-    	this.duration = newDuration;
-    	return true;
-    }
-    
-    /**
-     * Admin-only: update the room capacity.
-     * Only the admin can change capacity.
-     */
-    public boolean updateCapacity(User user, int newCapacity) {
-    	if (!isAdmin(user)) {
-    		System.out.println("Only the admin can change the capacity.");
-    		return false;
-    	}
-    	if (newCapacity < getCurrentSize()) {
-    		System.out.println("New capacity cannot be less than current number of users.");
-    		return false;
-    	}
-    	this.capacity = newCapacity;
-    	return true;
-    }
-    
-    /**
-     * Returns list of user names currently in the room.
-     * Admin can use this to see who is in the room.
-     */
-    public String[] getUserNames() {
-    	String[] names = new String[getCurrentSize()];
-    	int i = 0;
-    	for (User user : userStatusMap.keySet()) {
-    		names[i] = user.getName();
-    		i++;
-    	}
-    	return names;
     }
 }
