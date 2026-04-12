@@ -25,9 +25,11 @@ public class User {
     // new fields for pokemon trophy and leaderboard tracking
     private BagInterface<Trophy> trophyBag;
     private Pokemon currentPokemon;
-    private long totalStudyMinutes;
+    private long totalStudySeconds;
     private int currentStreak;
     private UserStatus currentStatus;
+    // to track if user manually clicked break during study session
+    private boolean manualBreakTrack = false;
 
     // new field to keep track of each user's notification queue
     private QueueInterface<Notification> notificationQueue;
@@ -54,7 +56,7 @@ public class User {
         // initialize pokemon/trophy related tracking fields
         this.trophyBag = new ResizableArrayBag<Trophy>();
         this.currentPokemon = null;
-        this.totalStudyMinutes = 0;
+        this.totalStudySeconds = 0;
         this.currentStreak = 0;
         this.currentStatus = UserStatus.OFFLINE;
         
@@ -167,13 +169,19 @@ public class User {
     }
     
     // tracking total study time for leaderboard
-    public void addStudyTime(long minutes) {
-        this.totalStudyMinutes += minutes;
+    public void addStudyTime(long seconds) {
+        this.totalStudySeconds += seconds;
     }
     
+    // get total study time in seconds
+    public long getTotalStudySeconds() {
+		return totalStudySeconds;
+	}
+    
+    // get total study time in minutes
     public long getTotalStudyMinutes() {
-        return totalStudyMinutes;
-    }
+		return totalStudySeconds / 60;
+	}
     
     public int getCurrentStreak() {
         return currentStreak;
@@ -285,13 +293,21 @@ public class User {
     public void setLastStudyDate(LocalDate date) {
     	this.lastStudyDate = date;
     }
-    
-    
-    
-    @Override
-    public String toString() {
-        return String.format("User{name='%s', trophies=%d, pokemon=%s}",
-            name, getTrophyCount(), 
-            (currentPokemon != null ? currentPokemon.getCurrentName() : "none"));
-    }
+        
+    // to keep track of manual break taken in room and account for it in study timer
+    public boolean isManualBreakTrack() {
+		return manualBreakTrack;
+	}
+
+	public void setManualBreakTrack(boolean manualBreakTrack) {
+		this.manualBreakTrack = manualBreakTrack;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("User{name='%s', trophies=%d, pokemon=%s, studyTime=%ds}",
+			name, getTrophyCount(), 
+			(currentPokemon != null ? currentPokemon.getCurrentName() : "none"),
+			totalStudySeconds);
+	}
 }

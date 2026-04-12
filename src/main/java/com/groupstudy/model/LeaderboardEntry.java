@@ -5,16 +5,16 @@ public class LeaderboardEntry implements Comparable<LeaderboardEntry>{
 	// private fields
 	private String userName;
 	private int trophyCount;
-	private long studyMinutes;
+	private long studySeconds;
 	private int streak;
 	
-	public LeaderboardEntry(String userName, int trophyCount, long studyMinutes, int streak) {
+	public LeaderboardEntry(String userName, int trophyCount, long studySeconds, int streak) {
 		if(userName == null || userName.trim().isEmpty()) {
 			throw new IllegalArgumentException("Username cannot be null or empty");
 		}
 		this.userName = userName;
 		this.trophyCount = trophyCount;
-		this.studyMinutes = studyMinutes;
+		this.studySeconds = studySeconds;
 		this.streak = streak;
 	}
 	
@@ -26,8 +26,12 @@ public class LeaderboardEntry implements Comparable<LeaderboardEntry>{
 		return trophyCount;
 	}
 
+	public long getStudySeconds() {
+		return studySeconds;
+	}
+	
 	public long getStudyMinutes() {
-		return studyMinutes;
+		return studySeconds / 60;
 	}
 
 	public int getStreak() {
@@ -45,7 +49,7 @@ public class LeaderboardEntry implements Comparable<LeaderboardEntry>{
 	    }
 	    
 	    // Tie-breaker: compare by study time
-	    return Long.compare(other.studyMinutes, this.studyMinutes);
+	    return Long.compare(other.studySeconds, this.studySeconds);
 	}
 	
 	@Override
@@ -61,11 +65,11 @@ public class LeaderboardEntry implements Comparable<LeaderboardEntry>{
         return userName.hashCode();
     }
     
-    @Override
-    public String toString() {
-        return String.format("%s - Trophies: %d, Time: %d min, Streak: %d",
-            userName, trophyCount, studyMinutes, streak);
-    }
+	@Override
+	public String toString() {
+		return String.format("%s - Trophies: %d, Time: %d sec (%d min), Streak: %d",
+			userName, trophyCount, studySeconds, getStudyMinutes(), streak);
+	}
   
 
 }

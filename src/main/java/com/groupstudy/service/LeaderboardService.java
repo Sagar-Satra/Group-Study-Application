@@ -35,6 +35,7 @@ public class LeaderboardService {
 		}
 	}
 	
+	// returns top N entries from the global leaderboard
 	public LeaderboardEntry[] getTopEntries(int n) {
 		LeaderboardEntry[] array = listToArray();
 		sorter.sort(array);
@@ -48,6 +49,7 @@ public class LeaderboardService {
 		return top;
 	}
 	
+	// returns the rank of a user in the global leaderboard
 	public int getUserRankGlobally(String username) {
 		LeaderboardEntry[] array = listToArray();
         sorter.sort(array);
@@ -61,6 +63,7 @@ public class LeaderboardService {
         return -1;
 	}
 	
+	// returns the rank of a user within a room
 	public int getUserRankInRoom(StudyRoom room, String username) {
 		LeaderboardEntry[] roomLeaderBoard = getRoomLeaderBoard(room);
 		for(int i = 0; i < roomLeaderBoard.length; i++ ) {
@@ -72,7 +75,7 @@ public class LeaderboardService {
 		return -1;
 	}
 	
-	
+	// gets the leaderboard for a specific study room at a particular instance
 	public LeaderboardEntry[] getRoomLeaderBoard(StudyRoom room) {
 		if(room == null) {
 			return new LeaderboardEntry[0];
@@ -86,7 +89,9 @@ public class LeaderboardService {
 		LeaderboardEntry[] array = new LeaderboardEntry[roomSize];
 		int index = 0;
 		for(User user : room.getAllStatus().keySet()) {
-			array[index] = new LeaderboardEntry(user.getName(), user.getTrophyCount(), room.getStudyTime(user)/60000,  user.getCurrentStreak());
+			// converting milli seconds to seconds
+			long studyTimeSeconds = room.getStudyTime(user) / 1000;
+			array[index] = new LeaderboardEntry(user.getName(), user.getTrophyCount(), studyTimeSeconds,  user.getCurrentStreak());
 			index++;
 		}
 		
@@ -94,6 +99,7 @@ public class LeaderboardService {
 		return array;
 	}
 	
+	// returns the leaderboard for all users globally in sorted descending order of number of trophies
 	public LeaderboardEntry[] getAllEntries() {
 		LeaderboardEntry[] array = listToArray();
 		sorter.sort(array);

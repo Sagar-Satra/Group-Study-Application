@@ -5,8 +5,6 @@ import com.groupstudy.model.StudyRoom;
 import com.groupstudy.model.User;
 import com.groupstudy.service.AuthService;
 import com.groupstudy.service.UserStore;
-import com.groupstudy.ui.StudyRoomUI;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -110,7 +108,7 @@ public class RoomSearchUI {
             }
 
             // search across all rooms in the lobby
-            StudyRoom foundRoom = findRoom(roomId);
+            StudyRoom foundRoom = LobbyUI.findRoomById(roomId);
 
             if (foundRoom == null) {
                 messageLabel.setText("No room found with ID: " + roomId);
@@ -138,25 +136,11 @@ public class RoomSearchUI {
 
         root.getChildren().addAll(headerRow, separator, searchCard);
 
-        Scene scene = new Scene(root, 400, 600);
+        Scene scene = new Scene(root, 600, 700);
         stage.setTitle("Search Room");
         stage.setScene(scene);
     }
 
-    /**
-     * Search for a room by ID from the lobby's room list.
-     */
-    private static StudyRoom findRoom(String roomId) {
-        // access the static rooms list from LobbyUI
-        // We iterate through all rooms to find a match
-        // This is a linear search through the ArrayListImplementation
-        com.groupstudy.adt.ListInterface<StudyRoom> publicRooms = null;
-        
-        // Use RoomManager if available, otherwise search lobby rooms
-        // For now, we'll search by checking each room card
-        // Since rooms is static in LobbyUI, we need a getter
-        return LobbyUI.findRoomById(roomId);
-    }
 
     /**
      * Creates a card showing the found room's details with a join button.

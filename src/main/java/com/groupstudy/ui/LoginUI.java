@@ -1,9 +1,7 @@
 package com.groupstudy.ui;
 
-import com.groupstudy.ui.RegisterUI;
 import com.groupstudy.service.UserStore;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,16 +17,12 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 /**
- * Login screen - the entry point of the application.
- * Users must log in before accessing the lobby and rooms.
+ * when we start the application, this screen will appear
+ * Users must log in before accessing the lobby and rooms
  */
-public class LoginUI extends Application {
+public class LoginUI {
 
-    @Override
-    public void start(Stage primaryStage) {
-        show(primaryStage);
-    }
-
+	// display the login screen, called from Main.java on application startup
     public static void show(Stage stage) {
 
         VBox root = new VBox(15);
@@ -143,13 +137,10 @@ public class LoginUI extends Application {
 
         root.getChildren().addAll(appTitle, subtitle, loginCard);
 
-        Scene scene = new Scene(root, 400, 600);
+        Scene scene = new Scene(root, 600, 700);
         stage.setTitle("Group Study - Login");
         stage.setScene(scene);
         stage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
