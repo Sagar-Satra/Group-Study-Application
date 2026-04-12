@@ -47,7 +47,7 @@ public class RoomCardUI extends VBox {
 
         // capacity
         Label capacityLabel = new Label(
-                "👥 " + room.getCurrentSize() + " / " + room.getCapacity()
+                "👥 " + room.getActiveUserCount() + " / " + room.getCapacity()
         );
         capacityLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 12));
         capacityLabel.setTextFill(Color.web("#34495e"));

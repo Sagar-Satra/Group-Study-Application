@@ -147,6 +147,32 @@ public class StudyRoom {
         return userStatusMap.size();
     }
     
+    public int getActiveUserCount() {
+        int count = 0;
+        for (User user : userStatusMap.keySet()) {
+            RoomStatus status = userStatusMap.get(user);
+
+            if (status != RoomStatus.LEFT && status != RoomStatus.SESSION_ENDED) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    public MapInterface<User, RoomStatus> getActiveUsers() {
+        MapInterface<User, RoomStatus> active = new HashMapImplementation<>();
+
+        for (User user : userStatusMap.keySet()) {
+            RoomStatus status = userStatusMap.get(user);
+
+            if (status != RoomStatus.LEFT && status != RoomStatus.SESSION_ENDED) {
+                active.put(user, status);
+            }
+        }
+
+        return active;
+    }
+    
     public long getRemainingTime() {
         long elapsed = System.currentTimeMillis() - startTime;
         return Math.max(0, duration - elapsed);
