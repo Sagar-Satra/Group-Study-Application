@@ -86,6 +86,11 @@ public class StudyRoomUI extends BorderPane{
 		
 		// first setting up UI
 		setupUI();
+		
+		room.updateStatus(currentUser, RoomStatus.STUDYING);
+	    onBreak = false;
+	    breakButton.setText("Take Break");
+	    
 		// get and display the user's study timer
 		showUserStudyTimer();
 		// get and display the room's remaining time
@@ -271,7 +276,7 @@ public class StudyRoomUI extends BorderPane{
 		VBox section = new VBox(5);
 		section.setAlignment(Pos.CENTER);
 		
-		participantCountLabel = new Label("Other Participants (" + (room.getCurrentSize() - 1) + "):"); 
+		participantCountLabel = new Label("Participants (" + room.getCurrentSize() + "):"); 
         participantCountLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         participantCountLabel.setTextFill(Color.web("#34495e"));
         
@@ -394,16 +399,16 @@ public class StudyRoomUI extends BorderPane{
 		participantsContainer.getChildren().clear();
 		
 		// now update the count label
-		participantCountLabel.setText("Other Participants (" + (room.getCurrentSize() - 1) + "):");
+		participantCountLabel.setText("Participants (" + room.getCurrentSize() + "):");
         
 		// get the other users name currently in the room - exclude current user
 		for (User user : room.getAllStatus().keySet()) {
-            if (!user.equals(currentUser)) {
-            	RoomStatus status = room.getStatus(user);
-            	ParticipantCardUI card = new ParticipantCardUI(user, status);
-                participantsContainer.getChildren().add(card);
-            }
-        }	
+
+		    RoomStatus status = room.getStatus(user);
+		    ParticipantCardUI card = new ParticipantCardUI(user, status);
+
+		    participantsContainer.getChildren().add(card);
+		}	
 	}
 	
 	// method to display notification if the user reaches the top position
@@ -441,6 +446,7 @@ public class StudyRoomUI extends BorderPane{
                                "-fx-padding: 10 20; -fx-cursor: hand; -fx-background-radius: 5;");
             room.updateStatus(currentUser, RoomStatus.STUDYING);
 		}
+		updateParticipantsDisplay();
 	}
 	
 	// leave event logic
