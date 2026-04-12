@@ -262,6 +262,8 @@ public class RoomSearchUI {
             StudyRoomUI.show(stage, room, currentUser);
             dialog.close();
         });
+        
+        cancelBtn.setOnAction(e -> dialog.close());
 
         // assemble
         root.getChildren().addAll(title, prompt, passwordField, errorLabel, buttonRow);
