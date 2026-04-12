@@ -1,4 +1,4 @@
-package com.groupstudy;
+package com.groupstudy.ui;
 
 import com.groupstudy.service.UserStore;
 

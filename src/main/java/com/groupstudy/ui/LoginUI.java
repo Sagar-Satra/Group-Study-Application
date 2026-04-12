@@ -1,5 +1,6 @@
-package com.groupstudy;
+package com.groupstudy.ui;
 
+import com.groupstudy.ui.RegisterUI;
 import com.groupstudy.service.UserStore;
 
 import javafx.application.Application;
