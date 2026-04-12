@@ -7,9 +7,9 @@ public class Trophy {
 	private String imagePath;
 	private int evolutionStage;
 	private LocalDateTime earnedDate;
-	private long studyMinutes;
+	private long studySeconds;
 	
-	public Trophy(String pokemon, String imagePath, int evolutionStage, long studyMinutes) {
+	public Trophy(String pokemon, String imagePath, int evolutionStage, long studySeconds) {
 		if (evolutionStage < 2 || evolutionStage > 3) {
 			throw new IllegalArgumentException("Trophy stage must be 2 or 3");
 		}
@@ -17,7 +17,7 @@ public class Trophy {
 		this.imagePath = imagePath;
 		this.evolutionStage = evolutionStage;
 		this.earnedDate = LocalDateTime.now();
-		this.studyMinutes = studyMinutes;
+		this.studySeconds = studySeconds;
 	}
 	
 	public String getPokemonName() {
@@ -36,9 +36,16 @@ public class Trophy {
         return earnedDate;
     }
     
-    public long getStudyMinutes() {
-        return studyMinutes;
+    public long getStudySeconds() {
+        return studySeconds;
     }
+    
+    /**
+	 * Returns study time in minutes for display.
+	 */
+	public long getStudyMinutes() {
+		return studySeconds / 60;
+	}
 	
     @Override
     public boolean equals(Object obj) {
@@ -49,9 +56,14 @@ public class Trophy {
     }
     
     @Override
-    public String toString() {
-        return pokemonName + " (Stage " + evolutionStage + ") - " + studyMinutes + " min";
-    }
+	public int hashCode() {
+		return pokemonName.hashCode() * 31 + evolutionStage;
+	}
+    
+    @Override
+	public String toString() {
+		return pokemonName + " (Stage " + evolutionStage + ") - " + studySeconds + " sec (" + getStudyMinutes() + " min)";
+	}
     
     
 	

@@ -1,8 +1,11 @@
 package com.groupstudy.service;
 
+import com.groupstudy.Main;
 import com.groupstudy.adt.MapInterface;
 import com.groupstudy.implementation.HashMapImplementation;
+import com.groupstudy.model.StudyRoom;
 import com.groupstudy.model.User;
+import com.groupstudy.model.UserStatus;
 
 /**
  * In-memory user store that manages registration, login, and logout.
@@ -98,6 +101,20 @@ public class UserStore {
 
 		// set as current user and update status
 		currentUser = users.get(trimmedUsername);
+		
+		// if the current user is already in a room, remove them and login fresh
+		if (currentUser.getCurrentStatus() == UserStatus.IN_ROOM) {
+			RoomManager roomManager = Main.getRoomManager();
+			for (String roomId : roomManager.getAllRoom().keySet()) {
+				StudyRoom room = roomManager.getRoom(roomId);
+				if (room.containsUser(currentUser)) {
+					room.removeUser(currentUser);
+				}
+			}
+			// set the pokemon to null
+			currentUser.setCurrentPokemon(null);
+		}
+		
 		currentUser.login();
 		return true;
 	}

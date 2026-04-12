@@ -208,7 +208,7 @@ public class RoomCreationUI {
 
         root.getChildren().addAll(headerRow, separator, formCard);
 
-        Scene scene = new Scene(root, 400, 600);
+        Scene scene = new Scene(root, 600, 700);
         stage.setTitle("Create Room");
         stage.setScene(scene);
     }

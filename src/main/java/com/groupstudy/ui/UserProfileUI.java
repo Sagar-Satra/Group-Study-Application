@@ -45,7 +45,7 @@ public class UserProfileUI {
         root.setTop(topSection);
         root.setCenter(centerSection);
 
-        Scene scene = new Scene(root, 400, 600);
+        Scene scene = new Scene(root, 600, 700);
         stage.setTitle("Profile - " + user.getName());
         stage.setScene(scene);
     }

@@ -39,12 +39,12 @@ public class LeaderboardController {
      * called from lobbyUI when user clicks trophy button
      * 
      */
-    public static void show(Stage stage, String username, StudyRoom room) {
+    public static void show(Stage stage, String username, StudyRoom room, LeaderboardService leaderboardService) {
 	    	try {
 	    		FXMLLoader loader = new FXMLLoader(
 	    				LeaderboardController.class.getResource("/fxml/LeaderboardView.fxml"));
 	    		// puts loaded UI into the scene(canvas) with Load FXML, create controller and call initialize()
-	    		Scene scene = new Scene(loader.load(), 400,600);
+	    		Scene scene = new Scene(loader.load(), 600,700);
 	    		
 	    		// gets the instance of the controller, which was created automatically
 	    		LeaderboardController controller = loader.getController();
@@ -52,10 +52,9 @@ public class LeaderboardController {
 	    		controller.currentUsername = username;
 	    		
 	    		// creating the leaderboardService to get the data
-    			// controller.leaderboardService = new LeaderboardService();
-        		controller.leaderboardService = createTestLeaderboard();
+    			controller.leaderboardService = leaderboardService;
+    			
 	    		if (room != null) {
-	    			System.out.println("inside the leadeboard controller");
 	    			controller.currentRoom = room;
 	    			// load room users data after every layout is set up
 	    			controller.loadRoomLeaderboardData(room);
@@ -241,15 +240,4 @@ public class LeaderboardController {
         }
     }
     
-    private static LeaderboardService createTestLeaderboard() {
-        LeaderboardService service = new LeaderboardService();
-        
-        service.addOrUpdateEntry(new LeaderboardEntry("Yuxuan", 18, 350, 7));
-        service.addOrUpdateEntry(new LeaderboardEntry("Aditya", 15, 300, 5));
-        service.addOrUpdateEntry(new LeaderboardEntry("Sagar", 12, 280, 3));
-        service.addOrUpdateEntry(new LeaderboardEntry("TestUser", 10, 200, 2));
-        service.addOrUpdateEntry(new LeaderboardEntry("Alice", 8, 150, 1));
-        
-        return service;
-    }
 }

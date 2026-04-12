@@ -19,6 +19,7 @@ public class ParticipantCardUI extends VBox {
 	private User user;
 	private ImageView pokemonImageView;
 	private Label usernameLabel;
+	private Label pokemonNameLabel;
 	private Label statusLabel;
 	private RoomStatus status;
 	
@@ -36,17 +37,34 @@ public class ParticipantCardUI extends VBox {
 		this.setStyle("-fx-background-color: white; " +
                 "-fx-background-radius: 10; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);");
-		this.setMaxWidth(80);
+		this.setMaxWidth(120);
 		
+		
+		usernameLabel = new Label(user.getName());
+		usernameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+	    usernameLabel.setTextFill(Color.web("#2c3e50"));
+	    usernameLabel.setMaxWidth(110);
+	    usernameLabel.setWrapText(false);
+	    usernameLabel.setAlignment(Pos.CENTER);
+	    this.getChildren().add(usernameLabel);
+	    
 		// creating view space for pokemon
 		pokemonImageView = new ImageView();
-		pokemonImageView.setFitWidth(50);
-		pokemonImageView.setFitHeight(50);
+		pokemonImageView.setFitWidth(80);
+		pokemonImageView.setFitHeight(80);
 		pokemonImageView.setPreserveRatio(true);
+		this.getChildren().add(pokemonImageView);
 		
 		// now inserting small pokemon image if user has one
 		Pokemon pokemon = user.getCurrentPokemon();
 		if (pokemon != null) {
+			pokemonNameLabel = new Label(pokemon.getCurrentName());
+			pokemonNameLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 10));
+		    pokemonNameLabel.setTextFill(Color.web("#7f8c8d"));
+		    pokemonNameLabel.setMaxWidth(110);
+		    pokemonNameLabel.setAlignment(Pos.CENTER);
+		    this.getChildren().add(pokemonNameLabel);
+		    
 			String imagePath = pokemon.getCurrentImagePath();
 			try {
 				Image image = new Image(getClass().getResourceAsStream(imagePath));
@@ -55,18 +73,12 @@ public class ParticipantCardUI extends VBox {
 				System.err.println("Could not load Pokemon image for user: " + user.getName() + ". Image Path: " + imagePath);
 			}
 		}
-		usernameLabel = new Label(user.getName());
-		usernameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12));
-	    usernameLabel.setTextFill(Color.web("#2c3e50"));
-	    usernameLabel.setMaxWidth(70);
-	    usernameLabel.setWrapText(false);
-	    usernameLabel.setAlignment(Pos.CENTER);
-	    
+		
 	    statusLabel = new Label(getStatusText(status));
-	    statusLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 10));
+	    statusLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 13));
 	    statusLabel.setTextFill(getStatusColor(status));
 
-	    this.getChildren().addAll(pokemonImageView, usernameLabel, statusLabel);
+	    this.getChildren().add(statusLabel);
 	}
 	
 	private String getStatusText(RoomStatus status) {

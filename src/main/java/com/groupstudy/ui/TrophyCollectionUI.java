@@ -38,7 +38,7 @@ public class TrophyCollectionUI {
         root.setTop(topSection);
         root.setCenter(centerSection);
         
-        Scene scene = new Scene(root, 700, 600);
+        Scene scene = new Scene(root, 600, 700);
         stage.setScene(scene);
         stage.setTitle("My Trophy Collection - " + user.getName());
 	}

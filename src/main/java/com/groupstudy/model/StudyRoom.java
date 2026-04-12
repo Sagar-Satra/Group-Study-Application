@@ -64,6 +64,9 @@ public class StudyRoom {
         studyTimeMap.put(user, 0L);
         
         user.setCurrentStatus(UserStatus.IN_ROOM);
+        // reset user's activity timers
+        user.setLastUpdateTime(System.currentTimeMillis());
+        user.setLastInteractionTime(System.currentTimeMillis());
     }
 
     // Remove user from the room
