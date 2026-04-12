@@ -1,4 +1,4 @@
-package com.groupstudy;
+package com.groupstudy.ui;
 
 import com.groupstudy.controller.LeaderboardController;
 import com.groupstudy.implementation.ArrayListImplementation;
@@ -7,8 +7,6 @@ import com.groupstudy.model.StudyRoom;
 import com.groupstudy.model.User;
 import com.groupstudy.service.PokemonService;
 import com.groupstudy.service.UserStore;
-import com.groupstudy.ui.StudyRoomUI;
-import com.groupstudy.ui.TrophyCollectionUI;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -164,7 +162,7 @@ public class LobbyUI extends Application {
 
             StudyRoom room = rooms.get(i);
 
-            RoomCardUI card = new RoomCardUI(room);
+            com.groupstudy.ui.RoomCardUI card = new RoomCardUI(room);
 
             card.setOnMouseClicked(e -> {
             	// get the actual logged-in user from UserStore

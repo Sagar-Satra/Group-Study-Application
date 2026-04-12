@@ -1,6 +1,6 @@
 package com.groupstudy.ui;
 
-import com.groupstudy.LobbyUI;
+import com.groupstudy.ui.LobbyUI;
 import com.groupstudy.controller.LeaderboardController;
 import com.groupstudy.model.ActionRecord;
 import com.groupstudy.model.Pokemon;
@@ -408,7 +408,7 @@ public class StudyRoomUI extends BorderPane{
 		// get the other users name currently in the room - exclude current user
 		for (User user : room.getAllStatus().keySet()) {
             if (!user.equals(currentUser)) {
-                ParticipantCardUI card = new ParticipantCardUI(user);
+                ParticipantCardUI card = new ParticipantCardUI(user, room.getStatus(user));
                 participantsContainer.getChildren().add(card);
             }
         }	
