@@ -1,6 +1,8 @@
 package com.groupstudy.ui;
 
+import com.groupstudy.LobbyUI;
 import com.groupstudy.controller.LeaderboardController;
+import com.groupstudy.model.ActionRecord;
 import com.groupstudy.model.Pokemon;
 import com.groupstudy.model.RoomStatus;
 import com.groupstudy.model.StudyRoom;
@@ -69,6 +71,7 @@ public class StudyRoomUI extends BorderPane{
 	private int studyMinutes = 0;
 	private boolean onBreak = false;
 	private int previousLeaderboardPosition = -1;
+	private boolean hasRecordedStart = false; // tracks if START action was recorded
 	
 	// using constructor to initialize the layout and services
 	public StudyRoomUI(StudyRoom room, User currentUser) {
@@ -86,11 +89,6 @@ public class StudyRoomUI extends BorderPane{
 		
 		// first setting up UI
 		setupUI();
-		
-		room.updateStatus(currentUser, RoomStatus.STUDYING);
-	    onBreak = false;
-	    breakButton.setText("Take Break");
-	    
 		// get and display the user's study timer
 		showUserStudyTimer();
 		// get and display the room's remaining time
@@ -276,7 +274,7 @@ public class StudyRoomUI extends BorderPane{
 		VBox section = new VBox(5);
 		section.setAlignment(Pos.CENTER);
 		
-		participantCountLabel = new Label("Participants (" + room.getCurrentSize() + "):"); 
+		participantCountLabel = new Label("Other Participants (" + (room.getCurrentSize() - 1) + "):"); 
         participantCountLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         participantCountLabel.setTextFill(Color.web("#34495e"));
         
@@ -324,6 +322,12 @@ public class StudyRoomUI extends BorderPane{
 					if(!onBreak) {
 						// just read study time from Room
 						studyMinutes = (int) (room.getStudyTime(currentUser) / 60000);
+						
+						// record START action once when user first begins studying
+						if (!hasRecordedStart && studyMinutes >= 0) {
+							currentUser.recordAction(new ActionRecord(ActionRecord.ActionType.START, room.getTitle()));
+							hasRecordedStart = true;
+						}
 						
 						// update pokemon display
 						updatePokemonDisplay();
@@ -399,16 +403,15 @@ public class StudyRoomUI extends BorderPane{
 		participantsContainer.getChildren().clear();
 		
 		// now update the count label
-		participantCountLabel.setText("Participants (" + room.getCurrentSize() + "):");
+		participantCountLabel.setText("Other Participants (" + (room.getCurrentSize() - 1) + "):");
         
 		// get the other users name currently in the room - exclude current user
 		for (User user : room.getAllStatus().keySet()) {
-
-		    RoomStatus status = room.getStatus(user);
-		    ParticipantCardUI card = new ParticipantCardUI(user, status);
-
-		    participantsContainer.getChildren().add(card);
-		}	
+            if (!user.equals(currentUser)) {
+                ParticipantCardUI card = new ParticipantCardUI(user);
+                participantsContainer.getChildren().add(card);
+            }
+        }	
 	}
 	
 	// method to display notification if the user reaches the top position
@@ -438,6 +441,9 @@ public class StudyRoomUI extends BorderPane{
 			breakButton.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; " +
                     "-fx-padding: 10 20; -fx-cursor: hand; -fx-background-radius: 5;");
 			room.updateStatus(currentUser, RoomStatus.BREAK);
+			
+			// record BREAK action in user's action history (LinkedList)
+			currentUser.recordAction(new ActionRecord(ActionRecord.ActionType.BREAK, room.getTitle()));
 
 		} else {
 			onBreak = false;
@@ -445,8 +451,10 @@ public class StudyRoomUI extends BorderPane{
             breakButton.setStyle("-fx-background-color: #95a5a6; -fx-text-fill: white; " +
                                "-fx-padding: 10 20; -fx-cursor: hand; -fx-background-radius: 5;");
             room.updateStatus(currentUser, RoomStatus.STUDYING);
+            
+            // record RESUME action in user's action history (LinkedList)
+            currentUser.recordAction(new ActionRecord(ActionRecord.ActionType.RESUME, room.getTitle()));
 		}
-		updateParticipantsDisplay();
 	}
 	
 	// leave event logic
@@ -454,6 +462,12 @@ public class StudyRoomUI extends BorderPane{
 		// stop UI timer for the current user when left
 		if (studyTimer != null) studyTimer.stop();
 		if (roomTimer != null) roomTimer.stop();
+		
+		// record LEAVE action in user's action history (LinkedList)
+		currentUser.recordAction(new ActionRecord(ActionRecord.ActionType.LEAVE, room.getTitle()));
+		
+		// update study streak since user completed a session
+		currentUser.updateStreak();
 		
 		// clear all notifications on leaving
 		notificationService.clearOnRoomExit(currentUser);
@@ -466,6 +480,12 @@ public class StudyRoomUI extends BorderPane{
 		// stop all timers
 		if (studyTimer != null) studyTimer.stop();
 		if (roomTimer != null) roomTimer.stop();
+		
+		// record SESSION_END action in user's action history (LinkedList)
+		currentUser.recordAction(new ActionRecord(ActionRecord.ActionType.SESSION_END, room.getTitle()));
+		
+		// update study streak since user completed a session
+		currentUser.updateStreak();
 		
 		// add notification to queue
 		notificationService.addSessionEnd(currentUser, studyMinutes);

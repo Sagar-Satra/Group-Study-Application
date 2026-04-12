@@ -1,9 +1,13 @@
 package com.groupstudy.model;
 
 import com.groupstudy.adt.BagInterface;
+import com.groupstudy.adt.ListInterface;
 import com.groupstudy.adt.QueueInterface;
+import com.groupstudy.implementation.LinkedListImplementation;
 import com.groupstudy.implementation.QueueImplementation;
 import com.groupstudy.implementation.ResizableArrayBag;
+
+import java.time.LocalDate;
 
 public class User {
 	
@@ -28,6 +32,15 @@ public class User {
     // new field to keep track of each user's notification queue
     private QueueInterface<Notification> notificationQueue;
     
+    // ===== Action History using Singly Linked List =====
+    // Stores chronological record of all user actions (join, break, resume, leave, etc.)
+    // LinkedListImplementation is our custom singly linked list ADT
+    private ListInterface<ActionRecord> actionHistory;
+    
+    // ===== Streak Tracking =====
+    // Tracks the last date the user completed a study session
+    private LocalDate lastStudyDate;
+    
     
     public User(String name) {
         this.name = name;
@@ -47,6 +60,12 @@ public class User {
         
         // initialize notification related field
         this.notificationQueue = new QueueImplementation<Notification>();
+        
+        // initialize action history as empty linked list
+        this.actionHistory = new LinkedListImplementation<ActionRecord>();
+        
+        // initialize streak tracking
+        this.lastStudyDate = null;
         
     }
 
@@ -186,6 +205,85 @@ public class User {
     
     public boolean hasPendingNotifications() {
     	return !notificationQueue.isEmpty();
+    }
+    
+    
+    // ===== Action History Methods (LinkedList) =====
+    
+    /**
+     * Records an action to the user's history.
+     * Uses add() on the linked list which appends to the end,
+     * so the list stays in chronological order.
+     */
+    public void recordAction(ActionRecord action) {
+    	if (action != null) {
+    		actionHistory.add(action);
+    	}
+    }
+    
+    /**
+     * Returns all action records as a ListInterface.
+     * Can be traversed from index 0 to getLength()-1 for chronological display.
+     */
+    public ListInterface<ActionRecord> getActionHistory() {
+    	return actionHistory;
+    }
+    
+    /**
+     * Returns the total number of recorded actions.
+     */
+    public int getActionCount() {
+    	return actionHistory.getLength();
+    }
+    
+    /**
+     * Clears the action history.
+     */
+    public void clearActionHistory() {
+    	actionHistory.clear();
+    }
+    
+    
+    // ===== Streak Tracking Methods =====
+    
+    /**
+     * Updates the study streak.
+     * Called when a study session completes.
+     * If the user studied yesterday, increment streak.
+     * If the user studied today already, keep streak as is.
+     * Otherwise, reset streak to 1 (new streak starts today).
+     */
+    public void updateStreak() {
+    	LocalDate today = LocalDate.now();
+    	
+    	if (lastStudyDate == null) {
+    		// first time studying
+    		currentStreak = 1;
+    	} else if (lastStudyDate.equals(today)) {
+    		// already studied today, streak stays same
+    	} else if (lastStudyDate.equals(today.minusDays(1))) {
+    		// studied yesterday, increment streak
+    		currentStreak++;
+    	} else {
+    		// missed a day or more, reset to 1
+    		currentStreak = 1;
+    	}
+    	
+    	lastStudyDate = today;
+    }
+    
+    /**
+     * Returns the last date the user studied.
+     */
+    public LocalDate getLastStudyDate() {
+    	return lastStudyDate;
+    }
+    
+    /**
+     * Sets the last study date (used for testing/demo).
+     */
+    public void setLastStudyDate(LocalDate date) {
+    	this.lastStudyDate = date;
     }
     
     
