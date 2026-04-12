@@ -1,6 +1,7 @@
 package com.groupstudy.ui;
 
 import com.groupstudy.Main;
+import com.groupstudy.adt.ListInterface;
 import com.groupstudy.controller.LeaderboardController;
 import com.groupstudy.model.ActionRecord;
 import com.groupstudy.model.StudyRoom;
@@ -144,30 +145,30 @@ public class LobbyUI {
     
     // rebuild room cards UI
     private void refreshRoomList() {
-		roomList.getChildren().clear();
+        roomList.getChildren().clear();
 
-		RoomManager roomManager = Main.getRoomManager();
+        RoomManager roomManager = Main.getRoomManager();
 
-		for (String roomId : roomManager.getAllRoom().keySet()) {
-			StudyRoom room = roomManager.getRoom(roomId);
+        ListInterface<StudyRoom> rooms = roomManager.getPublicRooms();
 
-			RoomCardUI card = new RoomCardUI(room);
+        for (int i = 0; i < rooms.getLength(); i++) {
+            StudyRoom room = rooms.get(i);
 
-			card.setOnMouseClicked(e -> {
-				User currentUser = UserStore.getInstance().getCurrentUser();
-				if (currentUser == null) return;
-				
-				room.addUser(currentUser);
-				
-				currentUser.recordAction(new ActionRecord(ActionRecord.ActionType.JOIN, room.getTitle()));
-				
-				// Open study room (Pokemon assigned inside StudyRoomUI constructor)
-				StudyRoomUI.show(stage, room, currentUser);
-			});
+            RoomCardUI card = new RoomCardUI(room);
 
-			roomList.getChildren().add(card);
-		}
-	}
+            card.setOnMouseClicked(e -> {
+                User currentUser = UserStore.getInstance().getCurrentUser();
+                if (currentUser == null) return;
+
+                room.addUser(currentUser);
+                currentUser.recordAction(new ActionRecord(ActionRecord.ActionType.JOIN, room.getTitle()));
+
+                StudyRoomUI.show(stage, room, currentUser);
+            });
+
+            roomList.getChildren().add(card);
+        }
+    }
 
     // helper method to get the stage (window)
     private Stage getStage() {
