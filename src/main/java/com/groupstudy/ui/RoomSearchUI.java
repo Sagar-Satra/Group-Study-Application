@@ -1,5 +1,6 @@
 package com.groupstudy.ui;
 
+import com.groupstudy.Main;
 import com.groupstudy.model.ActionRecord;
 import com.groupstudy.model.StudyRoom;
 import com.groupstudy.model.User;
@@ -13,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -67,12 +69,12 @@ public class RoomSearchUI {
         searchCard.setStyle("-fx-background-color: white; -fx-background-radius: 15; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);");
 
-        Label searchLabel = new Label("Enter Room ID");
+        Label searchLabel = new Label("Enter Room Title");
         searchLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 13));
         searchLabel.setTextFill(Color.web("#34495e"));
 
         TextField searchField = new TextField();
-        searchField.setPromptText("e.g. ROOM-123456");
+        searchField.setPromptText("e.g. Math Study");
         searchField.setMaxWidth(300);
         searchField.setStyle("-fx-padding: 10; -fx-background-radius: 5; " +
                 "-fx-border-color: #bdc3c7; -fx-border-radius: 5;");
@@ -99,33 +101,37 @@ public class RoomSearchUI {
             resultArea.getChildren().clear();
             messageLabel.setVisible(false);
 
-            String roomId = searchField.getText().trim();
-            if (roomId.isEmpty()) {
-                messageLabel.setText("Please enter a Room ID.");
+            String keyword = searchField.getText().trim().toLowerCase();
+
+            if (keyword.isEmpty()) {
+                messageLabel.setText("Please enter a keyword.");
                 messageLabel.setTextFill(Color.web("#e74c3c"));
                 messageLabel.setVisible(true);
                 return;
             }
 
-            // search across all rooms in the lobby
-            StudyRoom foundRoom = LobbyUI.findRoomById(roomId);
+            boolean found = false;
 
-            if (foundRoom == null) {
-                messageLabel.setText("No room found with ID: " + roomId);
+            for (String id : Main.getRoomManager().getAllRoom().keySet()) {
+
+                StudyRoom room = Main.getRoomManager().getRoom(id);
+
+                if (room.getTitle().toLowerCase().contains(keyword)) {
+
+                    if (room.isClosed()) continue;
+                    if (room.getCurrentSize() >= room.getCapacity()) continue;
+
+                    VBox roomDetails = createRoomDetails(stage, room, messageLabel);
+                    resultArea.getChildren().add(roomDetails);
+
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                messageLabel.setText("No rooms found with title: " + keyword);
                 messageLabel.setTextFill(Color.web("#e74c3c"));
                 messageLabel.setVisible(true);
-            } else if (foundRoom.isClosed()) {
-                messageLabel.setText("This room's session has already ended.");
-                messageLabel.setTextFill(Color.web("#e67e22"));
-                messageLabel.setVisible(true);
-            } else if (foundRoom.getCurrentSize() >= foundRoom.getCapacity()) {
-                messageLabel.setText("This room is full (" + foundRoom.getCapacity() + "/" + foundRoom.getCapacity() + ").");
-                messageLabel.setTextFill(Color.web("#e67e22"));
-                messageLabel.setVisible(true);
-            } else {
-                // room found - show details and join option
-                VBox roomDetails = createRoomDetails(stage, foundRoom, messageLabel);
-                resultArea.getChildren().add(roomDetails);
             }
         });
 
@@ -173,30 +179,97 @@ public class RoomSearchUI {
         typeLabel.setTextFill(Color.web("#7f8c8d"));
 
         card.getChildren().addAll(foundLabel, nameLabel, adminLabel, capacityLabel, typeLabel);
+        
+        Button joinBtn = createJoinButton(stage, room, messageLabel, null);
+        card.getChildren().add(joinBtn);
+        
+		return card;
+        
+    }
+    
+    private static void showPasswordDialog(Stage stage, StudyRoom room, User currentUser) {
 
-        if (room.isPrivate()) {
-            // show password field for private rooms
-            Label passLabel = new Label("Enter room password:");
-            passLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 12));
-            passLabel.setTextFill(Color.web("#34495e"));
+        Stage dialog = new Stage();
+        dialog.setTitle("Private Room");
+        
 
-            PasswordField passField = new PasswordField();
-            passField.setPromptText("Room password");
-            passField.setMaxWidth(270);
-            passField.setStyle("-fx-padding: 8; -fx-background-radius: 5; " +
-                    "-fx-border-color: #bdc3c7; -fx-border-radius: 5;");
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(25));
+        root.setAlignment(Pos.CENTER);
+        root.setStyle(
+            "-fx-background-color: white;" +
+            "-fx-background-radius: 15;" +
+            "-fx-border-radius: 15;" +
+            "-fx-border-color: #dddddd;" +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 3);"
+        );
 
-            Button joinBtn = createJoinButton(stage, room, messageLabel, passField);
-            passField.setOnAction(e -> joinBtn.fire());
+        // title
+        Label title = new Label("🔒 " + room.getTitle());
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 18));
 
-            card.getChildren().addAll(passLabel, passField, joinBtn);
-        } else {
-            // public room - just show join button
-            Button joinBtn = createJoinButton(stage, room, messageLabel, null);
-            card.getChildren().add(joinBtn);
-        }
+        // prompt
+        Label prompt = new Label("Enter password");
+        prompt.setTextFill(Color.web("#555"));
 
-        return card;
+        // password field
+        PasswordField passwordField = new PasswordField();
+        passwordField.setMaxWidth(200);
+        passwordField.setStyle(
+            "-fx-padding: 8;" +
+            "-fx-background-radius: 8;" +
+            "-fx-border-radius: 8;" +
+            "-fx-border-color: #ccc;"
+        );
+
+        // error label
+        Label errorLabel = new Label();
+        errorLabel.setStyle("-fx-text-fill: #e74c3c;");
+        errorLabel.setVisible(false);
+
+        // buttons
+        Button cancelBtn = new Button("Cancel");
+        Button joinBtn = new Button("Join");
+
+        cancelBtn.setStyle(
+            "-fx-background-color: #bdc3c7;" +
+            "-fx-text-fill: white;" +
+            "-fx-background-radius: 8;"
+        );
+
+        joinBtn.setStyle(
+            "-fx-background-color: #2ecc71;" +
+            "-fx-text-fill: white;" +
+            "-fx-background-radius: 8;"
+        );
+
+        HBox buttonRow = new HBox(10, cancelBtn, joinBtn);
+        buttonRow.setAlignment(Pos.CENTER);
+        
+        joinBtn.setOnAction(e -> {
+
+            String input = passwordField.getText();
+            AuthService auth = new AuthService();
+
+            if (!room.verifyPassword(input, auth)) {
+                errorLabel.setText("Incorrect password");
+                errorLabel.setVisible(true);
+                return;
+            }
+
+            // correct → enter room
+            room.addUser(currentUser);
+            StudyRoomUI.show(stage, room, currentUser);
+            dialog.close();
+        });
+
+        // assemble
+        root.getChildren().addAll(title, prompt, passwordField, errorLabel, buttonRow);
+
+        Scene scene = new Scene(root, 300, 200);
+        dialog.setScene(scene);
+        dialog.initOwner(stage);
+        dialog.show();
     }
 
     private static Button createJoinButton(Stage stage, StudyRoom room, Label messageLabel, PasswordField passField) {
@@ -215,24 +288,11 @@ public class RoomSearchUI {
                 return;
             }
 
-            // verify password for private rooms
-            if (room.isPrivate() && passField != null) {
-                String password = passField.getText();
-                if (password.trim().isEmpty()) {
-                    messageLabel.setText("Please enter the room password.");
-                    messageLabel.setTextFill(Color.web("#e74c3c"));
-                    messageLabel.setVisible(true);
-                    return;
-                }
-                AuthService auth = new AuthService();
-                if (!room.verifyPassword(password, auth)) {
-                    messageLabel.setText("Incorrect password.");
-                    messageLabel.setTextFill(Color.web("#e74c3c"));
-                    messageLabel.setVisible(true);
-                    return;
-                }
+         // verify password for private rooms
+            if (room.isPrivate()) {
+            	showPasswordDialog(stage, room, currentUser);
+            	return;
             }
-
             // join the room
             room.addUser(currentUser);
             currentUser.recordAction(new ActionRecord(ActionRecord.ActionType.JOIN, room.getTitle()));
