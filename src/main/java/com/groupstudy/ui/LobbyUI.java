@@ -1,12 +1,14 @@
-package com.groupstudy.ui;
+package com.groupstudy;
 
 import com.groupstudy.controller.LeaderboardController;
 import com.groupstudy.implementation.ArrayListImplementation;
+import com.groupstudy.model.ActionRecord;
 import com.groupstudy.model.StudyRoom;
-import com.groupstudy.model.Trophy;
 import com.groupstudy.model.User;
-import com.groupstudy.service.AuthService;
 import com.groupstudy.service.PokemonService;
+import com.groupstudy.service.UserStore;
+import com.groupstudy.ui.StudyRoomUI;
+import com.groupstudy.ui.TrophyCollectionUI;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -25,7 +27,7 @@ import javafx.util.Duration;
 public class LobbyUI extends Application {
 
     // store rooms
-    public static ArrayListImplementation<StudyRoom> rooms = new ArrayListImplementation<>();
+    private static ArrayListImplementation<StudyRoom> rooms = new ArrayListImplementation<>();
 
     // UI container for room cards
     private VBox roomList;
@@ -47,11 +49,14 @@ public class LobbyUI extends Application {
         Button leaderboardBtn = new Button("🥇"); 
         Button addBtn = new Button("➕");
         Button searchBtn = new Button("🔍");
+        Button logoutBtn = new Button("🚪 Logout");
+        logoutBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; " +
+                "-fx-padding: 5 10; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-size: 11;");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        topBar.getChildren().addAll(profileBtn, spacer, leaderboardBtn, trophyBtn, addBtn, searchBtn);
+        topBar.getChildren().addAll(profileBtn, spacer, leaderboardBtn, trophyBtn, addBtn, searchBtn, logoutBtn);
         
         // ===== Room List =====
         roomList = new VBox();
@@ -59,21 +64,13 @@ public class LobbyUI extends Application {
         roomList.setPadding(new Insets(20));
 
         // ===== Data =====
+        // Only add default rooms if list is empty (first launch)
         if (rooms.getLength() == 0) {
-
-            // public rooms
-            StudyRoom room1 = new StudyRoom("Final Prep", 5, 100000, false, null);
-            StudyRoom room2 = new StudyRoom("Math Study", 4, 150000, false, null);
-
-            // private rooms
-            AuthService auth = new AuthService();
-            StudyRoom room3 = new StudyRoom("Secret Room", 3, 200000, true, auth.hashPassword("123"));
-            StudyRoom room4 = new StudyRoom("Hidden Study", 2, 200000, true, auth.hashPassword("abc"));
+            StudyRoom room1 = new StudyRoom("Final Prep", 5, 60000, false, null);
+            StudyRoom room2 = new StudyRoom("Math Study", 4, 90000, false, null);
 
             rooms.add(room1);
             rooms.add(room2);
-            rooms.add(room3);
-            rooms.add(room4);
         }
 
         // ===== Initial render =====
@@ -105,24 +102,26 @@ public class LobbyUI extends Application {
 
         // ===== Button actions =====
         profileBtn.setOnAction(e -> {
-            UserProfileUI.show(primaryStage);
+            User currentUser = UserStore.getInstance().getCurrentUser();
+            if (currentUser != null) {
+                UserProfileUI.show(primaryStage, currentUser);
+            }
         });
         
-        // view trophies action button
+        // view trophies action button - uses actual logged-in user
         trophyBtn.setOnAction(e -> {
-            User testUser = new User("Sagar");
-            // Add some test trophies
-            testUser.addTrophy(new Trophy("Charizard", "/images/charizard.png", 3, 60));
-            testUser.addTrophy(new Trophy("Blastoise", "/images/blastoise.png", 3, 65));
-            testUser.addTrophy(new Trophy("Venusaur", "/images/venusaur.png", 3, 70));
-            
-            TrophyCollectionUI.show(primaryStage, testUser);
+            User currentUser = UserStore.getInstance().getCurrentUser();
+            if (currentUser != null) {
+                TrophyCollectionUI.show(primaryStage, currentUser);
+            }
         });
         
-        // view leaderboard action button
+        // view leaderboard action button - uses actual logged-in user
         leaderboardBtn.setOnAction(e -> {
-            // need to replace user here with the actual logged in user
-            LeaderboardController.show(primaryStage, "Sagar", null);
+            User currentUser = UserStore.getInstance().getCurrentUser();
+            if (currentUser != null) {
+                LeaderboardController.show(primaryStage, currentUser.getName(), null);
+            }
         });
         
         addBtn.setOnAction(e -> {
@@ -131,6 +130,12 @@ public class LobbyUI extends Application {
         
         searchBtn.setOnAction(e -> {
         	RoomSearchUI.show(primaryStage);
+        });
+        
+        // logout action - clear session and go back to login
+        logoutBtn.setOnAction(e -> {
+            UserStore.getInstance().logout();
+            LoginUI.show(primaryStage);
         });
 
         // ===== Layout =====
@@ -150,10 +155,6 @@ public class LobbyUI extends Application {
         app.start(stage);
     }
     
-    public static ArrayListImplementation<StudyRoom> getRooms() {
-        return rooms;
-    }
-    
     // rebuild room cards UI
     private void refreshRoomList() {
 
@@ -166,12 +167,16 @@ public class LobbyUI extends Application {
             RoomCardUI card = new RoomCardUI(room);
 
             card.setOnMouseClicked(e -> {
-            	// need to fix this with actual logged in user
-                User currentUser = new User("Sagar");
+            	// get the actual logged-in user from UserStore
+                User currentUser = UserStore.getInstance().getCurrentUser();
+                if (currentUser == null) return;
+                
                 room.addUser(currentUser);
                 
+                // record JOIN action in user's action history (LinkedList)
+                currentUser.recordAction(new ActionRecord(ActionRecord.ActionType.JOIN, room.getTitle()));
+                
                 // dummy users to test the UI
-                // Add dummy users for testing
                 User dummy1 = new User("Aditya");
                 User dummy2 = new User("Yuxuan");
                 
@@ -185,9 +190,7 @@ public class LobbyUI extends Application {
                 StudyRoomUI.show(getStage(), room, currentUser);
             });
 
-            if (!room.isPrivate()) {
-                roomList.getChildren().add(card);
-            }
+            roomList.getChildren().add(card);
         }
     }
 
@@ -208,6 +211,29 @@ public class LobbyUI extends Application {
                 i--; // prevent skipping
             }
         }
+    }
+    
+    /**
+     * Static method to add a room to the lobby.
+     * Called from RoomCreationUI when a user creates a new room.
+     */
+    public static void addRoom(StudyRoom room) {
+    	rooms.add(room);
+    }
+    
+    /**
+     * Search for a room by its ID across all rooms in the lobby.
+     * Called from RoomSearchUI.
+     */
+    public static StudyRoom findRoomById(String roomId) {
+    	if (roomId == null) return null;
+    	for (int i = 0; i < rooms.getLength(); i++) {
+    		StudyRoom room = rooms.get(i);
+    		if (room.getRoomId().equals(roomId)) {
+    			return room;
+    		}
+    	}
+    	return null;
     }
 
     public static void main(String[] args) {
