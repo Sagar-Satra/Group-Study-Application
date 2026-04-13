@@ -1,34 +1,42 @@
 ## Project setup instructions
 ### Technology Stack
-- **Language**: Java 17/21
+- **Language**: Required Version 17. Java 21 may work but Java 17 is the configured version
 - **UI Framework**: JavaFX 21
 - **Build Tool**: Apache Maven 3.9.14
 - **Design Pattern**: Service Oriented Architecture
 
-### Step 1: Prerequisites to download and install
-- **Java Development Kit (JDK)**: Version 17 or 21
+### Step 1: Prerequisites to download and install - (Required)
+- **Java Development Kit (JDK)**: Required Version 17. Java 21 may work but Java 17 is the configured version in pom.xml
 - **Maven**: Version 3.6 or higher (required)
 - **IDE**: Eclipse
 
+- check installed version
+```bash
+java -version
+mvn -version
+```
+
 ### Step 2: Project Download or clone the repository
 **Option A: Download and Extract ZIP from Canvas Submission**
-- Download the project from the canvas submission
-- Extract the project files from zip into a new folder "group study application"
+- Download the project ZIP from the canvas submission
+- Extract it into a new folder "Group-Study-Application"
 
 **Option B: Clone from GitHub**
+Project: https://github.com/Sagar-Satra/Group-Study-Application.git
+Make a new folder: Group-Study-Application and open terminal into that folder
 ```bash
 git clone https://github.com/Sagar-Satra/Group-Study-Application.git
-cd Group-Study-Application
 ```
 
 ### 3. Import Project into IDE
 **For Eclipse IDE:**
 1. Open Eclipse
-2. Select `File` -> `Import` -> `Existing Maven Projects`
-3. Browse to the project folder "group study application"
+2. Select `File` -> `Import` -> Select `Existing Maven Projects`
+3. Browse to the project folder "Group-Study-Application"
 4. Click `Finish`
-5. Right click on pom.xml file -> Maven -> Update Project
-6. Wait for Maven to download dependencies and sync
+5. Right click the project or pom.xml file
+6. Select Maven -> Update Project -> Click Ok
+7. Wait for Maven to download dependencies and sync
 
 **For IntelliJ IDEA: in case Eclipse does not work**
 1. Open IntelliJ IDEA
@@ -39,40 +47,77 @@ cd Group-Study-Application
 
 
 #### 4. Build the Project
-**Option A: Using Terminal**
+**Option A: Using Eclipse**
+- Right click the project or pom.xml
+- Click "Run As" -> click **Maven clean**
+- Click "Run As" -> click **Maven install**
+
+**Option B: Using Terminal**
+Run this inside the project folder
 ```bash
 mvn clean install 
 ```
 
-This will:
-- Download all dependencies
-- Compile the source code
-- Package the application
+OR
 
-**Option B: Using Eclispse**
-- Right click pom.xml
-- Click "Run As" -> "Run Configuration" -> click Maven clean
-- Click "Run As" -> "Run Configuration" -> click Maven install
+Open terminal inside Eclipse IDE -> Right click project -> Locate "Show in Local Terminal" option
+```bash
+mvn clean install 
+```
 
 #### 5. Run the Application
-**Option A: Using Maven**
+**Option A: Using Eclipse**
+1. Right-click on **project** or **pom.xml** or **Main.java**
+2. Select Run As -> Maven Build
+2. In Goals field, enter: **clean javafx:run**
+3. Click **Run**
+
+
+**Option B: Using Maven**
+Run this inside the project folder - Preferred Command
 ```bash
 mvn clean javafx:run
 ```
 
-**Option B: Using Eclipse**
-1. Right-click on project -> Run As -> Maven Build
-2. In Goals field, type: **clean javafx:run**
-3. Click **Run**
-
-**Option C: Using IDE (Direct Run)**
-1. Locate Main.java in src/main/java/com/groupstudy/
-2. Right-click on the file
-3. Click "Run As" -> "Run Configuration" -> click Maven build
-4. In Goals field, type: **clean javafx:run**
-5. Click **Run**
-
-**Option D: Using Command Line**
+**Option C: Using Command Line - Alternative**
+This may also work:
 ```bash
 mvn exec:java -Dexec.mainClass="com.groupstudy.Main"
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Issue 1: JavaFX Runtime Components Missing**
+```
+Error: JavaFX runtime components are missing
+```
+**Solution:**
+- Ensure JavaFX dependencies are in `pom.xml`
+- Make sure Java 17 and Maven is installed
+```bash
+java -version
+mvn -version
+```
+- In Eclipse: right click on project and run:
+   - Maven -> Update Project
+- Rebuilt the project:
+- Run `mvn clean install`
+- Run using preferred command: 
+```bash
+mvn clean javafx:run
+```
+
+**Issue 2: Pokemon Images Not Loading**
+```
+Could not load Pokemon image: /images/pokemon.png
+```
+**Solution:**
+- Verify images are in `src/main/resources/images/`
+- Check image paths in `PokemonService.java` have `/images/` prefix
+- Rebuild project: `mvn clean compile`
+- Run using preferred command: 
+```bash
+mvn clean javafx:run
 ```
