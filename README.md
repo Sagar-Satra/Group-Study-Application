@@ -119,6 +119,7 @@ mvn exec:java -Dexec.mainClass="com.groupstudy.ui.LoginUI"
 
 ### 2. Pokemon Evolution System
 - Random Pokemon assignment when joining a room
+- Total Pokemon collected is tracked per user (each assignment counts as +1)
 - 15 different Pokemon families with 3 evolution stages each
 - Pokemon evolves automatically based on study time:
   - Stage 1 -> Stage 2: 30 minutes (ideally but for testing 1 min)
@@ -152,12 +153,21 @@ mvn exec:java -Dexec.mainClass="com.groupstudy.ui.LoginUI"
 - **Global Status**: Online, Offline, In Room
 - **Room Status**: Studying, Break, Left Early, Session Ended
 - Idle detection (5 seconds idle = studying)
+- Demo users simulate real-time status changes (Studying ↔ Break) for demonstration purposes
+- Simulation does not affect the current user
 - Manual break toggle in the room and keeping tracking
 
 ### 7. Multi-User Support
 - See other participants in the same room
 - View other users' Pokemon as small icons
 - Real-time participant list updates
+
+### 8. Demo Simulation System
+- Preloaded demo users automatically switch between Studying and Break states
+- Break duration is extended to simulate realistic behavior
+- Higher probability of breaks for better demo visualization
+- Only demo users are affected (current user is not impacted)
+- Ensures real-time UI updates without manual refresh
 
 ## Technical Architecture
 
@@ -229,6 +239,7 @@ You'll receive popup notifications for:
 - Study session ending
 
 ## Demo Flow
+Note: For demonstration purposes, time is accelerated and user behavior is simulated.
 
 ### Sample User Journey
 
