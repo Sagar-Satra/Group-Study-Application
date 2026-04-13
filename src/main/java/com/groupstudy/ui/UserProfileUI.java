@@ -166,8 +166,8 @@ public class UserProfileUI {
 
         VBox studyTimeBox = createStatItem("⏱", "Total Time", user.getTotalStudyMinutes() + " min");
         VBox trophyBox = createStatItem("🏆", "Trophies", String.valueOf(user.getTrophyCount()));
-        VBox pokemonBox = createStatItem("🎮", "Pokemon",
-                user.hasActivePokemon() ? user.getCurrentPokemon().getCurrentName() : "None");
+        VBox pokemonBox = createStatItem("🎮", "Pokemon Collected",
+        	    String.valueOf(user.getTotalPokemonAssigned()));
 
         statsRow.getChildren().addAll(studyTimeBox, trophyBox, pokemonBox);
 

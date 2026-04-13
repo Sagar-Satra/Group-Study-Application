@@ -217,6 +217,7 @@ public class DataInitializer {
 				// Assign a random Pokemon
 				Pokemon pokemon = pokemonService.assignRandomPokemon();
 				user.setCurrentPokemon(pokemon);
+				user.incrementPokemonCount();
 				
 				// Give some Pokemon a head start (simulate varying progress)
 				if (random.nextBoolean()) {

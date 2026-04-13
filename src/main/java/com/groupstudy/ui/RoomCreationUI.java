@@ -195,6 +195,7 @@ public class RoomCreationUI {
             if (currentUser.getCurrentPokemon() == null) {
                 Pokemon pokemon = new PokemonService().assignRandomPokemon();
                 currentUser.setCurrentPokemon(pokemon);
+                currentUser.incrementPokemonCount();
             }
             StudyTimer timer = new StudyTimer(Main.getLeaderboardService());
             timer.start(newRoom);

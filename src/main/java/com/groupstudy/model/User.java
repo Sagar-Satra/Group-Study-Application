@@ -43,6 +43,8 @@ public class User {
     // Tracks the last date the user completed a study session
     private LocalDate lastStudyDate;
     
+    private int totalPokemonAssigned;
+    
     
     public User(String name) {
         this.name = name;
@@ -303,6 +305,14 @@ public class User {
 		this.manualBreakTrack = manualBreakTrack;
 	}
 
+	public int getTotalPokemonAssigned() {
+	    return totalPokemonAssigned;
+	}
+	
+	public void incrementPokemonCount() {
+	    totalPokemonAssigned++;
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("User{name='%s', trophies=%d, pokemon=%s, studyTime=%ds}",
