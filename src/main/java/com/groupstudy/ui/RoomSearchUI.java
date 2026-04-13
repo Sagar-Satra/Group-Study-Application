@@ -166,7 +166,7 @@ public class RoomSearchUI {
         nameLabel.setTextFill(Color.web("#2c3e50"));
 
         String adminName = room.getAdmin() != null ? room.getAdmin().getName() : "Unknown";
-        Label adminLabel = new Label("👑 Admin: " + adminName);
+        Label adminLabel = new Label("🏠️ " + adminName);
         adminLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 12));
         adminLabel.setTextFill(Color.web("#7f8c8d"));
 

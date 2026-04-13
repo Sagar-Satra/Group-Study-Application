@@ -41,7 +41,7 @@ public class RoomCardUI extends VBox {
 
         // admin label
         String adminName = room.getAdmin() != null ? room.getAdmin().getName() : "—";
-        Label adminLabel = new Label("👑 " + adminName);
+        Label adminLabel = new Label("🏠️ " + adminName);
         adminLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 11));
         adminLabel.setTextFill(Color.web("#7f8c8d"));
 
