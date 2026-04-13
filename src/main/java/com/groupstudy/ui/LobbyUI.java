@@ -150,6 +150,7 @@ public class LobbyUI {
                 if (currentUser == null) return;
 
                 room.addUser(currentUser);
+                currentUser.setLastInteractionTime(0);
                 currentUser.recordAction(new ActionRecord(ActionRecord.ActionType.JOIN, room.getTitle()));
 
                 StudyRoomUI.show(stage, room, currentUser);

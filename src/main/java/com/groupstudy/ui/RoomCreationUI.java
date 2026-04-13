@@ -1,8 +1,12 @@
 package com.groupstudy.ui;
 
+import com.groupstudy.Main;
+import com.groupstudy.model.Pokemon;
 import com.groupstudy.model.StudyRoom;
 import com.groupstudy.model.User;
 import com.groupstudy.service.AuthService;
+import com.groupstudy.service.PokemonService;
+import com.groupstudy.service.StudyTimer;
 import com.groupstudy.service.UserStore;
 
 import javafx.geometry.Insets;
@@ -187,6 +191,13 @@ public class RoomCreationUI {
 
             // create room with current user as admin
             StudyRoom newRoom = new StudyRoom(title, capacity, durationMs, isPrivate, passwordHash, currentUser);
+            
+            if (currentUser.getCurrentPokemon() == null) {
+                Pokemon pokemon = new PokemonService().assignRandomPokemon();
+                currentUser.setCurrentPokemon(pokemon);
+            }
+            StudyTimer timer = new StudyTimer(Main.getLeaderboardService());
+            timer.start(newRoom);
 
             // add to lobby's room list (using static access)
             LobbyUI.addRoom(newRoom);
