@@ -173,7 +173,7 @@ public class RegisterUI {
 
         root.getChildren().addAll(appTitle, subtitle, registerCard);
 
-        Scene scene = new Scene(root, 400, 600);
+        Scene scene = new Scene(root, 600, 700);
         stage.setTitle("Group Study - Register");
         stage.setScene(scene);
     }
