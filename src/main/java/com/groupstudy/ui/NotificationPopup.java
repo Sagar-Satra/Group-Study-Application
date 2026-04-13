@@ -3,6 +3,9 @@ package com.groupstudy.ui;
 import com.groupstudy.model.Notification;
 import com.groupstudy.model.User;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,6 +17,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 public class NotificationPopup {
 	
@@ -55,6 +60,29 @@ public class NotificationPopup {
         Scene scene = new Scene(content, 320, 200);
         popup.setScene(scene);
         popup.show();
+        // move to top-right corner
+        popup.setX(stage.getX() + stage.getWidth() - 340);
+        popup.setY(stage.getY() + 20);
+        
+        // fade in
+        content.setOpacity(0);
+
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(250), content);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+        fadeIn.play();
+
+        // fade out
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(250), content);
+        fadeOut.setFromValue(1);
+        fadeOut.setToValue(0);
+
+        fadeOut.setOnFinished(e -> popup.close());
+
+        Timeline autoClose = new Timeline(
+            new KeyFrame(Duration.seconds(3), e -> fadeOut.play())
+        );
+        autoClose.play();
 	}
 	
 	// helper methods to create the popup stage
@@ -64,6 +92,7 @@ public class NotificationPopup {
         popup.initOwner(stage);    
         popup.setTitle(title);    
         popup.setResizable(false);   
+        popup.initStyle(StageStyle.UNDECORATED);
         return popup;     
 		
 	}
