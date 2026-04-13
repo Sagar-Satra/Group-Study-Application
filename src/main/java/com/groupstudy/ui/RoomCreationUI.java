@@ -192,11 +192,6 @@ public class RoomCreationUI {
             // create room with current user as admin
             StudyRoom newRoom = new StudyRoom(title, capacity, durationMs, isPrivate, passwordHash, currentUser);
             
-            if (currentUser.getCurrentPokemon() == null) {
-                Pokemon pokemon = new PokemonService().assignRandomPokemon();
-                currentUser.setCurrentPokemon(pokemon);
-                currentUser.incrementPokemonCount();
-            }
             StudyTimer timer = new StudyTimer(Main.getLeaderboardService());
             timer.start(newRoom);
 
