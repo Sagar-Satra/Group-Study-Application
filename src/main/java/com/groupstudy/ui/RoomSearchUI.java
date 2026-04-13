@@ -170,7 +170,7 @@ public class RoomSearchUI {
         adminLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 12));
         adminLabel.setTextFill(Color.web("#7f8c8d"));
 
-        Label capacityLabel = new Label("👥 " + room.getCurrentSize() + " / " + room.getCapacity());
+        Label capacityLabel = new Label("👥 " + room.getActiveUserCount() + " / " + room.getCapacity());
         capacityLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 12));
         capacityLabel.setTextFill(Color.web("#34495e"));
 
