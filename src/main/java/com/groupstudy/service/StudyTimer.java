@@ -140,7 +140,7 @@ public class StudyTimer {
 	 */
 	private void updateGlobalLeaderboard(StudyRoom room, User user) {
 		// converting study time from milliseconds to seconds for leaderboard
-		long studySeconds = room.getStudyTime(user) / 1000;
+		long studySeconds = user.getTotalStudySeconds();
 		
 		LeaderboardEntry entry = new LeaderboardEntry(
 			user.getName(),
