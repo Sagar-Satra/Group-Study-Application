@@ -1,0 +1,78 @@
+## Project setup instructions
+### Technology Stack
+- **Language**: Java 17/21
+- **UI Framework**: JavaFX 21
+- **Build Tool**: Apache Maven 3.9.14
+- **Design Pattern**: Service Oriented Architecture
+
+### Step 1: Prerequisites to download and install
+- **Java Development Kit (JDK)**: Version 17 or 21
+- **Maven**: Version 3.6 or higher (required)
+- **IDE**: Eclipse
+
+### Step 2: Project Download or clone the repository
+**Option A: Download and Extract ZIP from Canvas Submission**
+- Download the project from the canvas submission
+- Extract the project files from zip into a new folder "group study application"
+
+**Option B: Clone from GitHub**
+```bash
+git clone https://github.com/Sagar-Satra/Group-Study-Application.git
+cd Group-Study-Application
+```
+
+### 3. Import Project into IDE
+**For Eclipse IDE:**
+1. Open Eclipse
+2. Select `File` -> `Import` -> `Existing Maven Projects`
+3. Browse to the project folder "group study application"
+4. Click `Finish`
+5. Right click on pom.xml file -> Maven -> Update Project
+6. Wait for Maven to download dependencies and sync
+
+**For IntelliJ IDEA: in case Eclipse does not work**
+1. Open IntelliJ IDEA
+2. Select `File` ->  `Open`
+3. Navigate to the project folder and select it
+4. IntelliJ will automatically detect it as a Maven project
+5. Wait for Maven to download dependencies
+
+
+#### 4. Build the Project
+**Option A: Using Terminal**
+```bash
+mvn clean install 
+```
+
+This will:
+- Download all dependencies
+- Compile the source code
+- Package the application
+
+**Option B: Using Eclispse**
+- Right click pom.xml
+- Click "Run As" -> "Run Configuration" -> click Maven clean
+- Click "Run As" -> "Run Configuration" -> click Maven install
+
+#### 5. Run the Application
+**Option A: Using Maven**
+```bash
+mvn clean javafx:run
+```
+
+**Option B: Using Eclipse**
+1. Right-click on project -> Run As -> Maven Build
+2. In Goals field, type: **clean javafx:run**
+3. Click **Run**
+
+**Option C: Using IDE (Direct Run)**
+1. Locate Main.java in src/main/java/com/groupstudy/
+2. Right-click on the file
+3. Click "Run As" -> "Run Configuration" -> click Maven build
+4. In Goals field, type: **clean javafx:run**
+5. Click **Run**
+
+**Option D: Using Command Line**
+```bash
+mvn exec:java -Dexec.mainClass="com.groupstudy.Main"
+```

@@ -19,7 +19,7 @@
 - **Language**: Java 17/21
 - **UI Framework**: JavaFX 21
 - **Build Tool**: Apache Maven 3.9.14
-- **Design Pattern**: MVC (Model-View-Controller)
+- **Design Pattern**: Service Oriented Architecture
 
 ### Step 1: Prerequisites to download and install
 - **Java Development Kit (JDK)**: Version 17 or 21
@@ -31,7 +31,7 @@
 - Download the project from the canvas submission
 - Extract the project files from zip into a new folder "group study application"
 
-**Option A: Clone from GitHub**
+**Option B: Clone from GitHub**
 ```bash
 git clone https://github.com/Sagar-Satra/Group-Study-Application.git
 cd Group-Study-Application
@@ -53,18 +53,6 @@ cd Group-Study-Application
 4. IntelliJ will automatically detect it as a Maven project
 5. Wait for Maven to download dependencies
 
-#### 3. Configure JavaFX
-**In Eclipse:**
-The project uses JavaFX 21. Maven should automatically download dependencies, but if you encounter module issues:
-**Add VM arguments** (if needed):
-```
---module-path /path/to/javafx-sdk/lib --add-modules javafx.controls,javafx.fxml
-```
-
-**In IntelliJ:**
-1. `Run` -> `Edit Configurations`
-2. Add VM options in the configuration
-3. Apply and save
 
 #### 4. Build the Project
 **Option A: Using Terminal**
@@ -85,23 +73,24 @@ This will:
 #### 5. Run the Application
 **Option A: Using Maven**
 ```bash
-mvn javafx:run
+mvn clean javafx:run
 ```
 
-**Option B: Using Command Line**
-- Click "Run As" -> "Run Configuration" -> find **Goals** Field -> type **clean javafx:run** -> click run
+**Option B: Using Eclipse**
+1. Right-click on project -> Run As -> Maven Build
+2. In Goals field, type: **clean javafx:run**
+3. Click **Run**
 
-**Option B: Using Command Line**
-- Click "Run As" -> "Run Configuration" -> click Maven build
-
-**Option C: Using IDE**
-1. Locate `Main.java` or `LobbyUI.java`
+**Option C: Using IDE (Direct Run)**
+1. Locate Main.java in src/main/java/com/groupstudy/
 2. Right-click on the file
-3. Select `Run 'Main.main()'` or `Run 'LobbyUI.main()'`
+3. Click "Run As" -> "Run Configuration" -> click Maven build
+4. In Goals field, type: **clean javafx:run**
+5. Click **Run**
 
 **Option D: Using Command Line**
 ```bash
-mvn exec:java -Dexec.mainClass="com.groupstudy.ui.LoginUI"
+mvn exec:java -Dexec.mainClass="com.groupstudy.Main"
 ```
 
 ## Individual Contributions to the application
@@ -281,6 +270,7 @@ Error: JavaFX runtime components are missing
 - Ensure JavaFX dependencies are in `pom.xml`
 - Run `mvn clean install`
 - Check Java version (must be 17 or 21)
+- Check if Maven is installed
 
 **Issue 2: Pokemon Images Not Loading**
 ```
@@ -322,7 +312,7 @@ Module javafx.controls not found
 - Abstract Data Types (ADT) with interfaces
 - Concrete implementations
 - Service layer for business logic
-- Model-View-Controller (MVC) architecture
+- Service Oriented Architecture
 - Enums for status management
 
 ### JavaFX Features
@@ -356,16 +346,13 @@ Module javafx.controls not found
 - Shows Pokemon image, name, stage, and study time
 - Empty state for new users
 
-## 🔮 Future Enhancements
-
-- [ ] MySQL database integration for data persistence
-- [ ] User authentication and login system
-- [ ] Study streak tracking and visualization
-- [ ] Friends system and private study groups
-- [ ] Achievement badges beyond trophies
-- [ ] Study session history and analytics
-- [ ] Chat functionality within study rooms
-- [ ] Dark mode theme
+## Future Enhancements
+- AI integration for QnA
+- MySQL database integration for data persistence
+- Study streak tracking and visualization
+- Friends system with sending request and connecting using Sockets
+- Study analytics
+- Chat functionality within study rooms - Video chat or text based chat
 
 ## License
 
