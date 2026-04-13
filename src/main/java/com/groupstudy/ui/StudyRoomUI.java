@@ -1,7 +1,9 @@
 package com.groupstudy.ui;
 
 import com.groupstudy.Main;
+import com.groupstudy.adt.MapInterface;
 import com.groupstudy.controller.LeaderboardController;
+import com.groupstudy.implementation.HashMapImplementation;
 import com.groupstudy.model.ActionRecord;
 import com.groupstudy.model.Pokemon;
 import com.groupstudy.model.RoomStatus;
@@ -66,6 +68,8 @@ public class StudyRoomUI extends BorderPane {
 	private int previousLeaderboardPosition = -1;
 	private boolean hasRecordedStart = false;
 	
+	private MapInterface<User, Long> breakUntilMap = new HashMapImplementation<>();
+	
 	public StudyRoomUI(StudyRoom room, User currentUser) {
 		this.room = room;
 		this.currentUser = currentUser;
@@ -81,6 +85,7 @@ public class StudyRoomUI extends BorderPane {
 		setupUI();
 		startUIRefreshTimer();
 		showRoomCountdownTimer();
+		startDemoStatusSimulation();
 	}
 	
 	private void setupUI() {
@@ -266,6 +271,55 @@ public class StudyRoomUI extends BorderPane {
 		
 		buttonBox.getChildren().addAll(roomLeaderboardButton, breakButton);
 		return buttonBox;
+	}
+	
+	// Method for demo showing, it only affects the demo user, change their room status
+	private void startDemoStatusSimulation() {
+
+	    Timeline timeline = new Timeline();
+
+	    timeline.getKeyFrames().add(
+	        new KeyFrame(Duration.seconds(2), e -> {	
+	        	long now = System.currentTimeMillis();
+
+	            for (User user : room.getAllStatus().keySet()) {
+
+	                if (!user.isDemoUser()) continue;
+
+	                if (user.equals(currentUser)) continue;
+
+	                RoomStatus current = room.getStatus(user);
+
+	                if (current == RoomStatus.BREAK) {
+
+	                    Long breakUntil = breakUntilMap.get(user);
+
+	                    if (breakUntil != null && now < breakUntil) {
+	                        continue; 
+	                    }
+
+	                    room.updateStatus(user, RoomStatus.STUDYING);
+	                    breakUntilMap.remove(user);
+	                    continue;
+	                }
+
+	                if (current == RoomStatus.STUDYING) {
+
+	                    if (Math.random() < 0.3) {
+
+	                        room.updateStatus(user, RoomStatus.BREAK);
+
+	                        long breakDuration = 4000 + (long)(Math.random() * 4000);
+	                        breakUntilMap.put(user, now + breakDuration);
+	                    }
+	                }
+	            }
+	            updateParticipantsDisplay();
+	        })
+	    );
+
+	    timeline.setCycleCount(Timeline.INDEFINITE);
+	    timeline.play();
 	}
 	
 	private void startUIRefreshTimer() {

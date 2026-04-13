@@ -45,6 +45,8 @@ public class User {
     
     private int totalPokemonAssigned;
     
+    private boolean isDemoUser = false;
+    
     
     public User(String name) {
         this.name = name;
@@ -75,6 +77,14 @@ public class User {
 
     public String getName() {
         return name;
+    }
+    
+    public void setDemoUser(boolean isDemoUser) {
+        this.isDemoUser = isDemoUser;
+    }
+
+    public boolean isDemoUser() {
+        return isDemoUser;
     }
 
     public long getLastInteractionTime() {

@@ -1,6 +1,7 @@
 package com.groupstudy.service;
 
 import java.time.LocalDate;
+
 import java.util.Random;
 
 import com.groupstudy.model.LeaderboardEntry;
@@ -27,7 +28,10 @@ public class DataInitializer {
 	private Random random;
 	
 	// existing users
-	private static final String[] DEMO_USERNAMES = {"John", "Eve", "Frank", "Joe", "Bob", "Adele"};
+	private static final String[] DEMO_USERNAMES = {
+		    "John", "Eve", "Frank", "Joe", "Bob", "Adele",
+		    "Lily", "Mike", "Sophia", "Chris", "David", "Emma"
+		};
 	
 	
 	// constructor calls all the below methods
@@ -68,6 +72,7 @@ public class DataInitializer {
 			boolean registered = userStore.register(username, "demo123");
 			if (registered) {
 				User user = userStore.getUser(username);
+				user.setDemoUser(true);
 				
 				// Set random streak (0-10 days)
 				user.setCurrentStreak(random.nextInt(11));
@@ -196,8 +201,8 @@ public class DataInitializer {
 		for (String roomId : roomManager.getAllRoom().keySet()) {
 			StudyRoom room = roomManager.getRoom(roomId);
 			
-			// Determine how many users to add (2-4 users per room)
-			int userCount = random.nextInt(3) + 2;
+			// Determine how many users to add (4-7 users per room)
+			int userCount = random.nextInt(2) + 3;
 			userCount = Math.min(userCount, room.getCapacity());
 			
 			// Add users to this room
@@ -277,6 +282,8 @@ public class DataInitializer {
 		
 		System.out.println();
 	}
+	
+	
 	
 	/**
 	 * Returns the room manager (for UI access).
