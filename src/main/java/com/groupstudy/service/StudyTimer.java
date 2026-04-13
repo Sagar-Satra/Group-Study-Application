@@ -68,8 +68,7 @@ public class StudyTimer {
 
                     room.updateStatus(user, RoomStatus.STUDYING);
 
-                    // Calculate how much real time has passed since last update - in milliseconds
-                    long elapsedMillisec = now - user.getLastUpdateTime();
+                    long elapsedMillisec = 1000;
 
                     // Add that time to total study time
                     room.addStudyTime(user, elapsedMillisec);
@@ -116,9 +115,6 @@ public class StudyTimer {
                     // Otherwise, user is interacting → BREAK
                     room.updateStatus(user, RoomStatus.BREAK);
                 }
-
-                // Update last update time for next calculation
-                user.setLastUpdateTime(now);
 
                 // Print current state
                 System.out.println(
