@@ -75,6 +75,7 @@ public class StudyRoomUI extends BorderPane {
 		PokemonService pokemonService = new PokemonService();
 		this.myPokemon = pokemonService.assignRandomPokemon();
 		currentUser.setCurrentPokemon(this.myPokemon);
+		currentUser.incrementPokemonCount();
 		System.out.println("✅ Assigned new Pokemon: " + myPokemon.getCurrentName() + " to " + currentUser.getName());
 		
 		setupUI();
