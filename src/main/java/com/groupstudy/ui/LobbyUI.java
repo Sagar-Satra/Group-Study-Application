@@ -16,6 +16,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -28,16 +29,15 @@ public class LobbyUI {
 
     private VBox roomList;
     private Stage stage;
-    
+
     public static void show(Stage stage) {
-		LobbyUI lobby = new LobbyUI();
-		lobby.stage = stage;
-		lobby.buildUI(stage);
-	}
-    
+        LobbyUI lobby = new LobbyUI();
+        lobby.stage = stage;
+        lobby.buildUI(stage);
+    }
+
     public void buildUI(Stage primaryStage) {
 
-        // ===== Root layout =====
         BorderPane root = new BorderPane();
 
         // ===== Top Bar =====
@@ -48,116 +48,105 @@ public class LobbyUI {
 
         Button profileBtn = new Button("👤");
         Button trophyBtn = new Button("🏆");
-        Button leaderboardBtn = new Button("🥇"); 
+        Button leaderboardBtn = new Button("🥇");
         Button addBtn = new Button("➕");
         Button searchBtn = new Button("🔍");
         Button logoutBtn = new Button("🚪 Logout");
-        logoutBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; " +
-                "-fx-padding: 5 10; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-size: 11;");
+
+        logoutBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         topBar.getChildren().addAll(profileBtn, spacer, leaderboardBtn, trophyBtn, addBtn, searchBtn, logoutBtn);
-        
+
         // ===== Room List =====
-        roomList = new VBox();
-        roomList.setSpacing(20);
+        roomList = new VBox(20);
         roomList.setPadding(new Insets(20));
         roomList.setAlignment(Pos.TOP_CENTER);
-        
-        // get list of rooms and display them in lobby
+
         refreshRoomList();
 
-        // ===== Timeline (auto update every second) =====
+        // ===== Auto refresh =====
         Timeline timeline = new Timeline(
-    			new KeyFrame(Duration.seconds(1), e -> {
-    				// get list of rooms from RoomManager
-    				RoomManager roomManager = Main.getRoomManager();
-    				// checking if the room session ended
-    				for (String roomId : roomManager.getAllRoom().keySet()) {
-    					StudyRoom room = roomManager.getRoom(roomId);
+            new KeyFrame(Duration.seconds(1), e -> {
+                RoomManager roomManager = Main.getRoomManager();
 
-    					if (!room.isClosed() && room.isSessionOver()) {
-    						room.endSession();
-    					}
-    				}
-    				// cleaning expired rooms
-    				cleanRooms();
-    				// refresh the UI with updated rooms
-    				refreshRoomList();
-    			})
-    		);
+                for (String roomId : roomManager.getAllRoom().keySet()) {
+                    StudyRoom room = roomManager.getRoom(roomId);
+                    if (!room.isClosed() && room.isSessionOver()) {
+                        room.endSession();
+                    }
+                }
+
+                cleanRooms();
+                refreshRoomList();
+            })
+        );
 
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
         // ===== Button actions =====
         profileBtn.setOnAction(e -> {
-			User currentUser = UserStore.getInstance().getCurrentUser();
-			if (currentUser != null) {
-				UserProfileUI.show(primaryStage, currentUser);
-			}
-		});
-        
-        // view trophies action button - uses actual logged-in user
+            User user = UserStore.getInstance().getCurrentUser();
+            if (user != null) UserProfileUI.show(primaryStage, user);
+        });
+
         trophyBtn.setOnAction(e -> {
-			User currentUser = UserStore.getInstance().getCurrentUser();
-			if (currentUser != null) {
-				TrophyCollectionUI.show(primaryStage, currentUser);
-			}
-		});
-        
-        // view leaderboard action button - uses actual logged-in user
+            User user = UserStore.getInstance().getCurrentUser();
+            if (user != null) TrophyCollectionUI.show(primaryStage, user);
+        });
+
         leaderboardBtn.setOnAction(e -> {
-			User currentUser = UserStore.getInstance().getCurrentUser();
-			if (currentUser != null) {
-				LeaderboardService leaderboardService = Main.getLeaderboardService();
-				LeaderboardController.show(primaryStage, currentUser.getName(), null, leaderboardService);
-			}
-		});
-        
-        addBtn.setOnAction(e -> {
-			RoomCreationUI.show(primaryStage);
-		});
-		
-		searchBtn.setOnAction(e -> {
-			RoomSearchUI.show(primaryStage);
-		});
-        
-        // logout action - clear session and go back to login
+            User user = UserStore.getInstance().getCurrentUser();
+            if (user != null) {
+                LeaderboardService service = Main.getLeaderboardService();
+                LeaderboardController.show(primaryStage, user.getName(), null, service);
+            }
+        });
+
+        addBtn.setOnAction(e -> RoomCreationUI.show(primaryStage));
+        searchBtn.setOnAction(e -> RoomSearchUI.show(primaryStage));
+
         logoutBtn.setOnAction(e -> {
             UserStore.getInstance().logout();
             LoginUI.show(primaryStage);
         });
 
-        // ===== Layout =====
         root.setTop(topBar);
         root.setCenter(roomList);
 
         Scene scene = new Scene(root, 600, 700);
-
-        primaryStage.setTitle("Lobby");
         primaryStage.setScene(scene);
+        primaryStage.setTitle("Lobby");
         primaryStage.show();
     }
 
-    
-    // rebuild room cards UI
     private void refreshRoomList() {
+
         roomList.getChildren().clear();
 
         RoomManager roomManager = Main.getRoomManager();
+        User currentUser = UserStore.getInstance().getCurrentUser();
 
-        ListInterface<StudyRoom> rooms = roomManager.getPublicRooms();
+        // ===== Sections =====
+        VBox myRoomSection = new VBox(10);
+        VBox publicRoomSection = new VBox(10);
 
-        for (int i = 0; i < rooms.getLength(); i++) {
-            StudyRoom room = rooms.get(i);
+        Label myTitle = new Label("🏠 My Rooms");
+        Label publicTitle = new Label("🌐 Public Rooms");
+
+        myTitle.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+        publicTitle.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+
+        for (String roomId : roomManager.getAllRoom().keySet()) {
+
+            StudyRoom room = roomManager.getRoom(roomId);
 
             RoomCardUI card = new RoomCardUI(room);
 
             card.setOnMouseClicked(e -> {
-                User currentUser = UserStore.getInstance().getCurrentUser();
                 if (currentUser == null) return;
 
                 room.addUser(currentUser);
@@ -166,51 +155,52 @@ public class LobbyUI {
                 StudyRoomUI.show(stage, room, currentUser);
             });
 
-            roomList.getChildren().add(card);
+            // ===== grouping logic =====
+
+            // My Rooms: show ALL rooms created by user (including private)
+            if (room.getAdmin() != null &&
+                currentUser != null &&
+                room.getAdmin().getName().equals(currentUser.getName())) {
+
+                myRoomSection.getChildren().add(card);
+
+            }
+            // Public Rooms: only show non-private rooms
+            else if (!room.isPrivate()) {
+
+                publicRoomSection.getChildren().add(card);
+            }
+        }
+
+        if (myRoomSection.getChildren().isEmpty()) {
+            myRoomSection.getChildren().add(new Label("No rooms created yet."));
+        }
+
+        // ===== assemble =====
+        roomList.getChildren().addAll(
+            myTitle,
+            myRoomSection,
+            publicTitle,
+            publicRoomSection
+        );
+    }
+
+    private void cleanRooms() {
+        RoomManager roomManager = Main.getRoomManager();
+
+        for (String roomId : roomManager.getAllRoom().keySet()) {
+            StudyRoom room = roomManager.getRoom(roomId);
+            if (room.shouldRemove()) {
+                roomManager.removeRoom(roomId);
+            }
         }
     }
 
-    // helper method to get the stage (window)
-    private Stage getStage() {
-    		return (Stage) roomList.getScene().getWindow();
-    }
-    
-    // remove rooms after delay
-    private void cleanRooms() {
-		RoomManager roomManager = Main.getRoomManager();
-		
-		for (String roomId : roomManager.getAllRoom().keySet()) {
-			StudyRoom room = roomManager.getRoom(roomId);
-			if (room.shouldRemove()) {
-				roomManager.removeRoom(roomId);
-			}
-		}
-	}
-    
-    /**
-     * Static method to add a room to the lobby.
-     * Called from RoomCreationUI when a user creates a new room.
-     */
     public static void addRoom(StudyRoom room) {
-		RoomManager roomManager = Main.getRoomManager();
-		
-		if (roomManager != null) {
-			roomManager.addRoom(room);
-			System.out.println("== Added room to lobby: " + room.getTitle());
-		}
-	}
-    
-    /**
-     * Search for a room by its ID across all rooms in the lobby.
-     * Called from RoomSearchUI.
-     */
-    public static StudyRoom findRoomById(String roomId) {
-		if (roomId == null) return null;
-		
-		RoomManager roomManager = Main.getRoomManager();
-		if (roomManager == null) return null;
-		
-		return roomManager.getRoom(roomId);
-	}
+        Main.getRoomManager().addRoom(room);
+    }
 
+    public static StudyRoom findRoomById(String roomId) {
+        return Main.getRoomManager().getRoom(roomId);
+    }
 }
