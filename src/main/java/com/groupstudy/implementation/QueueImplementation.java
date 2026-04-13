@@ -40,7 +40,6 @@ public class QueueImplementation<T> implements QueueInterface<T> {
 			increaseCapacity();
 		}
 		
-		increaseCapacity();
 		queue[size] = newEntry;
 		size++;
 	}

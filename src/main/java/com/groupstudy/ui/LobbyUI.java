@@ -1,7 +1,6 @@
 package com.groupstudy.ui;
 
 import com.groupstudy.Main;
-import com.groupstudy.adt.ListInterface;
 import com.groupstudy.controller.LeaderboardController;
 import com.groupstudy.model.ActionRecord;
 import com.groupstudy.model.StudyRoom;
@@ -173,9 +172,11 @@ public class LobbyUI {
             }
         }
 
+        myRoomSection.setAlignment(Pos.TOP_CENTER);
         if (myRoomSection.getChildren().isEmpty()) {
             myRoomSection.getChildren().add(new Label("No rooms created yet."));
         }
+        publicRoomSection.setAlignment(Pos.TOP_CENTER);
 
         // ===== assemble =====
         roomList.getChildren().addAll(
