@@ -109,6 +109,8 @@ public class UserStore {
 				StudyRoom room = roomManager.getRoom(roomId);
 				if (room.containsUser(currentUser)) {
 					room.removeUser(currentUser);
+					currentUser.clearNotifications();
+					
 				}
 			}
 			// set the pokemon to null
