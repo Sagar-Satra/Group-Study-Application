@@ -101,7 +101,7 @@ The system is pre-populated using a DataInitializer service:
 > - Time is accelerated (seconds represent minutes)  
 > - UI icons may render differently across operating systems (Windows vs macOS)
 
-### 👥 Precreated Demo Users
+### Precreated Demo Users
 
 | Username | Password |
 |---------|----------|
@@ -119,7 +119,7 @@ The system is pre-populated using a DataInitializer service:
 | Emma | demo123 |
 
 
-### 🏠 Precreated Demo Rooms
+### Precreated Demo Rooms
 
 | Room Title | Type | Admin | Capacity | Password |
 |-----------|------|------|----------|----------|
