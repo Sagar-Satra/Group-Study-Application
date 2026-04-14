@@ -290,6 +290,7 @@ The system is pre-populated using a DataInitializer service:
 
 > Note: User behavior and Pokémon progression are randomized for demonstration purposes.
 > Note: For demonstration purposes, time is accelerated (seconds represent minutes), and user behavior is simulated.
+> Note: UI icons may look slightly different or not display properly depending on the operating system (Windows vs macOS).
 
 <table>
 <tr>
