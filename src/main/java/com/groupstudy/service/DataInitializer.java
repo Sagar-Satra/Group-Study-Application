@@ -127,7 +127,7 @@ public class DataInitializer {
 			false,
 			null
 		);
-		User admin1 = userStore.getUser("Sagar");
+		User admin1 = userStore.getUser("Lily");
 		room1.setAdmin(admin1);
 		roomManager.addRoom(room1);
 		System.out.println("  ✓ Created room: " + room1.getTitle() + " (" + room1.getRoomId() + ") - Public");
@@ -141,7 +141,7 @@ public class DataInitializer {
 			true,
 			hashedPassword
 		);
-		User admin2 = userStore.getUser("Aditya");
+		User admin2 = userStore.getUser("Chris");
 		room2.setAdmin(admin2);
 		roomManager.addRoom(room2);
 		System.out.println("  ✓ Created room: " + room2.getTitle() + " (" + room2.getRoomId() + ") - Private (password: study123)");
@@ -154,7 +154,7 @@ public class DataInitializer {
 			false,
 			null
 		);
-		User admin3 = userStore.getUser("Yuxuan");
+		User admin3 = userStore.getUser("Emma");
 		room3.setAdmin(admin3);
 		roomManager.addRoom(room3);
 		System.out.println("  ✓ Created room: " + room3.getTitle() + " (" + room3.getRoomId() + ") - Public");
@@ -213,6 +213,16 @@ public class DataInitializer {
 				
 				// Skip if user is already in a room
 				if (user.getCurrentStatus() == UserStatus.IN_ROOM) {
+					continue;
+				}
+				
+				// if the room has reached max capacity, break and don't add any further rooms
+				if (room.getActiveUserCount() >= room.getCapacity()) {
+					break;
+				}
+				
+				// dont add admin of the room into the room
+				if (user.getName().equals(room.getAdmin().getName())) {
 					continue;
 				}
 				
