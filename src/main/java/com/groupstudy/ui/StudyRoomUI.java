@@ -80,7 +80,6 @@ public class StudyRoomUI extends BorderPane {
 		this.myPokemon = pokemonService.assignRandomPokemon();
 		currentUser.setCurrentPokemon(this.myPokemon);
 		currentUser.incrementPokemonCount();
-		System.out.println("✅ Assigned new Pokemon: " + myPokemon.getCurrentName() + " to " + currentUser.getName());
 		
 		setupUI();
 		startUIRefreshTimer();
@@ -445,7 +444,6 @@ public class StudyRoomUI extends BorderPane {
 		// ===== Set Pokemon to NULL when leaving =====
 		currentUser.setCurrentPokemon(null);
 		currentUser.setManualBreakTrack(false);
-		System.out.println("Set Pokemon to NULL for " + currentUser.getName() + " (Trophies kept: " + currentUser.getTrophyCount() + ")");
 		
 		notificationService.clearOnRoomExit(currentUser);
 		room.removeUser(currentUser);
@@ -467,8 +465,7 @@ public class StudyRoomUI extends BorderPane {
 		// ===== Set Pokemon to NULL when session ends =====
 		currentUser.setCurrentPokemon(null);
 		currentUser.setManualBreakTrack(false);
-		System.out.println("Session ended. Set Pokemon to NULL for " + currentUser.getName() + " (Trophies kept: " + currentUser.getTrophyCount() + ")");
-		
+				
 		notificationService.clearOnRoomExit(currentUser);
 		LobbyUI.show(getStage());
 	}

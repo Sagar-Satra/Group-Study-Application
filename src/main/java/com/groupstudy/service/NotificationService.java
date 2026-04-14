@@ -24,7 +24,7 @@ public class NotificationService {
     }
     
     public void addSessionEnd(User user, int studyMinutes) {
-    	String message = String.format("⏳ Session ended! Total study time: %d minutes", studyMinutes);
+    	String message = String.format("⏳ Session ended! Total study time: %d seconds", studyMinutes);
         user.addNotification(new Notification(message, NotificationType.SESSION_END));
     }
     
