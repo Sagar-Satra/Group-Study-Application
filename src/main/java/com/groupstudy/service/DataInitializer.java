@@ -103,14 +103,10 @@ public class DataInitializer {
 					user.getCurrentStreak()
 				);
 				leaderboardService.addOrUpdateEntry(entry);
-				
-				System.out.println("  ✓ Created user: " + username 
-					+ " (Streak: " + user.getCurrentStreak() 
-					+ ", Trophies: " + user.getTrophyCount() + ")");
+			
 			}
 		}
 		
-		System.out.println();
 	}
 	
 	/**
@@ -130,7 +126,7 @@ public class DataInitializer {
 		User admin1 = userStore.getUser("Lily");
 		room1.setAdmin(admin1);
 		roomManager.addRoom(room1);
-		System.out.println("  ✓ Created room: " + room1.getTitle() + " (" + room1.getRoomId() + ") - Public");
+		System.out.println("Created room: " + room1.getTitle() + " (" + room1.getRoomId() + ") - Public");
 		
 		// Room 2: Private, 60 seconds session
 		String hashedPassword = authService.hashPassword("study123");
@@ -144,7 +140,7 @@ public class DataInitializer {
 		User admin2 = userStore.getUser("Chris");
 		room2.setAdmin(admin2);
 		roomManager.addRoom(room2);
-		System.out.println("  ✓ Created room: " + room2.getTitle() + " (" + room2.getRoomId() + ") - Private (password: study123)");
+		System.out.println("Created room: " + room2.getTitle() + " (" + room2.getRoomId() + ") - Private (password: study123)");
 		
 		// Room 3: Public, 90 seconds session
 		StudyRoom room3 = new StudyRoom(
@@ -157,7 +153,7 @@ public class DataInitializer {
 		User admin3 = userStore.getUser("Emma");
 		room3.setAdmin(admin3);
 		roomManager.addRoom(room3);
-		System.out.println("  ✓ Created room: " + room3.getTitle() + " (" + room3.getRoomId() + ") - Public");
+		System.out.println("Created room: " + room3.getTitle() + " (" + room3.getRoomId() + ") - Public");
 		
 		// Room 4: Public, 120 seconds session
 		StudyRoom room4 = new StudyRoom(
@@ -170,7 +166,7 @@ public class DataInitializer {
 		User admin4 = userStore.getUser("John");
 		room4.setAdmin(admin4);
 		roomManager.addRoom(room4);
-		System.out.println("  ✓ Created room: " + room4.getTitle() + " (" + room4.getRoomId() + ") - Public");
+		System.out.println("Created room: " + room4.getTitle() + " (" + room4.getRoomId() + ") - Public");
 		
 		// Room 5: Private, 45 seconds session
 		String hashedPassword2 = authService.hashPassword("team456");
@@ -184,7 +180,7 @@ public class DataInitializer {
 		User admin5 = userStore.getUser("Eve");
 		room5.setAdmin(admin5);
 		roomManager.addRoom(room5);
-		System.out.println("  ✓ Created room: " + room5.getTitle() + " (" + room5.getRoomId() + ") - Private (password: team456)");
+		System.out.println("Created room: " + room5.getTitle() + " (" + room5.getRoomId() + ") - Private (password: team456)");
 		
 		System.out.println();
 	}
@@ -194,7 +190,7 @@ public class DataInitializer {
 	 * Assigns users to rooms and gives them Pokemon.
 	 */
 	private void populateRooms() {
-		System.out.println("Populating rooms with users...");
+		System.out.println("Now populating rooms with users...");
 		
 		// Get all rooms
 		int roomIndex = 0;
@@ -239,18 +235,13 @@ public class DataInitializer {
 					long headStart = random.nextInt(20) + 5;  // 5-25 seconds
 					pokemon.addStudyTime(headStart);
 				}
-				
-				System.out.println("  ✓ " + username + " joined " + room.getTitle() 
-					+ " with " + pokemon.getCurrentName() 
-					+ " (Stage " + pokemon.getCurrentStage() + ")");
-				
+								
 				usersAdded++;
 			}
 			
 			roomIndex++;
 		}
 		
-		System.out.println();
 	}
 	
 	
@@ -259,8 +250,7 @@ public class DataInitializer {
 	 * Gives some users partial progress toward evolution.
 	 */
 	private void simulateProgress() {
-		System.out.println("Simulating study progress...");
-		
+			
 		for (String roomId : roomManager.getAllRoom().keySet()) {
 			StudyRoom room = roomManager.getRoom(roomId);
 			
@@ -274,23 +264,17 @@ public class DataInitializer {
 					long seconds = simulatedTime / 1000;
 					boolean evolved = user.getCurrentPokemon().addStudyTime(seconds);
 					
-					if (evolved) {
-						System.out.println("  ✓ " + user.getName() + "'s " 
-							+ user.getCurrentPokemon().getCurrentName() 
-							+ " evolved to Stage " + user.getCurrentPokemon().getCurrentStage());
-						
+					if (evolved) {						
 						// Create trophy if eligible
 						Trophy trophy = user.getCurrentPokemon().createTrophy();
 						if (trophy != null) {
 							user.addTrophy(trophy);
-							System.out.println("    🏆 Trophy earned!");
 						}
 					}
 				}
 			}
 		}
 		
-		System.out.println();
 	}
 	
 	

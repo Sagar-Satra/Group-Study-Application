@@ -94,7 +94,6 @@ public class StudyTimer {
 	                    		if(evolved) {
 	                    			String pokemonName = user.getCurrentPokemon().getCurrentName();
 	                    			int stage = user.getCurrentPokemon().getCurrentStage();
-	                    			System.out.println(user.getName() + "'s Pokemon evolved to " + pokemonName + " (Stage " + stage + ")");
 	                    			// send evolution notification to user
 	                    			notificationService.addPokemonEvolution(user, pokemonName, stage);
 	                    			
@@ -115,18 +114,7 @@ public class StudyTimer {
                     // Otherwise, user is interacting → BREAK
                     room.updateStatus(user, RoomStatus.BREAK);
                 }
-
-                // Print current state
-                System.out.println(
-    					user.getName()
-    					+ " | " + room.getStatus(user)
-    					+ " | time(ms) = " + room.getStudyTime(user)
-    					+ " | pokemon = " + (user.getCurrentPokemon() != null ? user.getCurrentPokemon().getCurrentName() + " (Stage " + user.getCurrentPokemon().getCurrentStage() + ")" : "none")
-    				);
             }
-
-            // Separator for readability in console
-            System.out.println("----");
 
         }, 0, 1, TimeUnit.SECONDS);
     }
@@ -153,8 +141,7 @@ public class StudyTimer {
 	 * updates streaks, sends notifications, and finalizes leaderboard
 	 */
 	private void handleSessionEnd(StudyRoom room) {
-		System.out.println("\n========== SESSION ENDING ==========");
-		
+				
 		for (User user : room.getAllStatus().keySet()) {
 			RoomStatus status = room.getStatus(user);
 			
@@ -173,16 +160,11 @@ public class StudyTimer {
 				// final leaderboard update
 				updateGlobalLeaderboard(room, user);
 				
-				System.out.println(user.getName() + " completed session: " 
-					+ finalStudySeconds + " seconds (" + (finalStudySeconds / 60) + " min), "
-					+ "Streak: " + user.getCurrentStreak() + " days, "
-					+ "Trophies: " + user.getTrophyCount());
 			}
 		}
 		
 		// now call the StudyRoom.java endSession() to update
 		room.endSession();
-		System.out.println("Room session has ended \n");
 	}
 	
 	
