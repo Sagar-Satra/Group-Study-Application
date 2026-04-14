@@ -292,6 +292,7 @@ The system is pre-populated using a DataInitializer service:
 > - User behavior and Pokémon progression are randomized for demonstration purposes  
 > - Time is accelerated (seconds represent minutes)  
 > - UI icons may render differently across operating systems (Windows vs macOS)
+> - Admin can join the room even if the capacity is full
 
 <table>
 <tr>
@@ -331,7 +332,6 @@ The system is pre-populated using a DataInitializer service:
 </td>
 </tr>
 </table>
-*Admin can join the room with full status
 
 ### Sample User Journey
 
