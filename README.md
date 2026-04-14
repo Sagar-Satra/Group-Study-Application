@@ -384,7 +384,7 @@ All core data structures are implemented from scratch (no Java Collections Frame
 - Stage management for multiple windows
 - Event handling and navigation
 
-## UI Screenshots
+## UI Overview
 
 ### Lobby View
 - Lists all available study rooms
