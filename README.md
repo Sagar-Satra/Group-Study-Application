@@ -320,13 +320,13 @@ The system is pre-populated using a DataInitializer service:
 
 ### 🏠 Precreated Demo Rooms
 
-| Room Title | Type | Capacity | Password |
-|-----------|------|----------|----------|
-| Quick Study Sprint | Public | 5 | — |
-| Private Focus Group | Private | 4 | study123 |
-| Math Study Group | Public | 6 | — |
-| CS Algorithm Practice | Public | 8 | — |
-| Late Night Grind | Private | 3 | team456 |
+| Room Title | Type | admin | Capacity | Password |
+|-----------|------|------|----------|----------|
+| Quick Study Sprint | Public | null | 5 | — |
+| Private Focus Group | Private | null | 4 | study123 |
+| Math Study Group | Public | null | 6 | — |
+| CS Algorithm Practice | Public | John | 8 | — |
+| Late Night Grind | Private | Eve | 3 | team456 |
 
 </td>
 </tr>
