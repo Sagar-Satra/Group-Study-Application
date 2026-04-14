@@ -331,6 +331,7 @@ The system is pre-populated using a DataInitializer service:
 </td>
 </tr>
 </table>
+*Admin can join the room with full status
 
 ### Sample User Journey
 
