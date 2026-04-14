@@ -296,6 +296,12 @@ public class RoomSearchUI {
                 return;
             }
             
+            // if the room is closed, show alert and return
+            if (room.isClosed()) {
+        			LobbyUI.showAlert("Session Ended", "This study session has already ended.");
+        			return;
+            }
+            
          // if the room is full, don't allow user to join, except if the user is admin 
             boolean isAdmin = room.isAdmin(currentUser);
             if (!isAdmin && room.getActiveUserCount() >= room.getCapacity()) {
