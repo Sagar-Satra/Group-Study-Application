@@ -322,9 +322,9 @@ The system is pre-populated using a DataInitializer service:
 
 | Room Title | Type | admin | Capacity | Password |
 |-----------|------|------|----------|----------|
-| Quick Study Sprint | Public | null | 5 | — |
-| Private Focus Group | Private | null | 4 | study123 |
-| Math Study Group | Public | null | 6 | — |
+| Quick Study Sprint | Public | Lily | 5 | — |
+| Private Focus Group | Private | Chris | 4 | study123 |
+| Math Study Group | Public | Emma | 6 | — |
 | CS Algorithm Practice | Public | John | 8 | — |
 | Late Night Grind | Private | Eve | 3 | team456 |
 
