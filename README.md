@@ -284,7 +284,7 @@ The system is pre-populated using a DataInitializer service:
 
 - Demo users are automatically created with default password: `demo123`
 - Study rooms (both public and private) are pre-created
-- Users are automatically assigned to rooms
+- Demo users are automatically assigned to rooms and will auto exit the room when account been logged in
 - Each user is assigned a random Pokémon upon joining a room
 - Study progress, Pokémon evolution, and leaderboard data are partially simulated
 
