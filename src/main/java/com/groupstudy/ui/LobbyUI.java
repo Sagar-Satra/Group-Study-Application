@@ -150,7 +150,7 @@ public class LobbyUI {
                 
                 // if the room is full, don't allow user to join, except if the user is admin 
                 boolean isAdmin = room.isAdmin(currentUser);
-                if (!isAdmin && room.getCurrentSize() >= room.getCapacity()) {
+                if (!isAdmin && room.getActiveUserCount() >= room.getCapacity()) {
                 		showAlert("Room is Full!", room.getTitle() + " has reached maximum capacity (" + room.getCapacity() + " users).");
                     return;
                 }

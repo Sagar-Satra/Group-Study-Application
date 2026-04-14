@@ -179,7 +179,7 @@ public class RoomSearchUI {
         card.getChildren().addAll(foundLabel, nameLabel, adminLabel, capacityLabel, typeLabel);
         
         // if the room is full, add a Full label and prevent user to join
-        if (room.getCurrentSize() >= room.getCapacity()) {
+        if (room.getActiveUserCount() >= room.getCapacity()) {
         		Label fullLabel = new Label("⚠️ ROOM FULL");
         		fullLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12));
             fullLabel.setTextFill(Color.web("#e74c3c"));
@@ -298,7 +298,7 @@ public class RoomSearchUI {
             
          // if the room is full, don't allow user to join, except if the user is admin 
             boolean isAdmin = room.isAdmin(currentUser);
-            if (!isAdmin && room.getCurrentSize() >= room.getCapacity()) {
+            if (!isAdmin && room.getActiveUserCount() >= room.getCapacity()) {
             		LobbyUI.showAlert("Room is Full!", room.getTitle() + " has reached maximum capacity (" + room.getCapacity() + " users).");
                 return;
             }
