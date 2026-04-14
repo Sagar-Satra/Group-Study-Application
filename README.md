@@ -7,6 +7,8 @@
 - This application basically motivates students to study more and simultaneously hook them up to play game.
 - Students can focus on studying together while being visible to others for accountability. 
 - The application features a Pokemon-themed gamification system where users are assigned a random Pokemon that evolve as they study more, creating an engaging and motivating study experience.
+> Core Idea: Combine real-time group accountability with gamification 
+to encourage consistent and focused studying.
 
 ## Team Members
 - **Sagar Jayantilal Satra**: satra.sa@northeastern.edu
@@ -158,8 +160,8 @@ mvn clean javafx:run
 - Total Pokemon collected is tracked per user (each assignment counts as +1)
 - 15 different Pokemon families with 3 evolution stages each
 - Pokemon evolves automatically based on study time:
-  - Stage 1 -> Stage 2: 30 minutes (ideally but for testing 1 min)
-  - Stage 2 -> Stage 3: 60 minutes total
+  - Stage 1 → Stage 2: 30 minutes (accelerated to seconds for demo)
+  - Stage 2 → Stage 3: 60 minutes total (accelerated for demo)
 - Visual progress bar showing evolution progress
 - Real-time Pokemon display with image updates for all participants in the room
 
@@ -276,22 +278,62 @@ You'll receive popup notifications for:
 - Study session ending
 
 ## Demo Flow
-Note: For demonstration purposes, time is accelerated and user behavior is simulated.
+### Demo Setup
+
+The system is pre-populated using a DataInitializer service:
+
+- Demo users are automatically created with default password: `demo123`
+- Study rooms (both public and private) are pre-created
+- Users are automatically assigned to rooms
+- Each user is assigned a random Pokémon upon joining a room
+- Study progress, Pokémon evolution, and leaderboard data are partially simulated
+
+> Note: User behavior and Pokémon progression are randomized for demonstration purposes.
+> Note: For demonstration purposes, time is accelerated (seconds represent minutes), and user behavior is simulated.
+
+<table>
+<tr>
+<td valign="top">
+
+### 👥 Precreated Demo Users
+
+| Username | Password |
+|---------|----------|
+| John | demo123 |
+| Eve | demo123 |
+| Frank | demo123 |
+| Joe | demo123 |
+| Bob | demo123 |
+| Adele | demo123 |
+| Lily | demo123 |
+| Mike | demo123 |
+| Sophia | demo123 |
+| Chris | demo123 |
+| David | demo123 |
+| Emma | demo123 |
+
+</td>
+
+<td valign="top">
+
+### 🏠 Demo Rooms
+
+| Room Title | Type | Capacity | Password |
+|-----------|------|----------|----------|
+| Quick Study Sprint | Public | 5 | — |
+| Private Focus Group | Private | 4 | study123 |
+| Math Study Group | Public | 6 | — |
+| CS Algorithm Practice | Public | 8 | — |
+| Late Night Grind | Private | 3 | team456 |
+
+</td>
+</tr>
+</table>
 
 ### Sample User Journey
 
-```
-1. User "Sagar" launches app → Lobby appears
-2. Clicks on "Final Prep" room → Enters study room
-3. Assigned "Charmander" (Stage 1)
-4. Studies for 30 minutes → "Charmander" evolves to "Charmeleon" (Stage 2)
-   └─ Notification: "🎉 Your Pokemon evolved to Charmeleon (Stage 2)!"
-5. Studies for 30 more minutes → "Charmeleon" evolves to "Charizard" (Stage 3)
-   └─ Notification: "🎉 Your Pokemon evolved to Charizard (Stage 3)!"
-   └─ Notification: "🏆 New trophy earned: Charizard!"
-6. Clicks "🏆 My Trophies" → Sees Charizard trophy in collection
-7. Returns to lobby → Clicks global leaderboard → Sees ranking
-```
+<img width="761" height="657" alt="Screenshot 2026-04-14 at 12 56 58" src="https://github.com/user-attachments/assets/0789ee99-5e96-4f32-949a-a368113f0f17" />
+
 
 ## Development Notes
 
