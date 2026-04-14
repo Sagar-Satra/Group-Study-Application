@@ -85,6 +85,51 @@ This may also work:
 mvn exec:java -Dexec.mainClass="com.groupstudy.Main"
 ```
 
+## Demo Flow
+### Demo Setup
+
+The system is pre-populated using a DataInitializer service:
+
+- Demo users are automatically created with default password: `demo123`
+- Study rooms (both public and private) are pre-created
+- Demo users are automatically assigned to rooms and will auto exit the room when account been logged in
+- Each user is assigned a random Pokémon upon joining a room
+- Study progress, Pokémon evolution, and leaderboard data are partially simulated
+
+> Notes:
+> - User behavior and Pokémon progression are randomized for demonstration purposes  
+> - Time is accelerated (seconds represent minutes)  
+> - UI icons may render differently across operating systems (Windows vs macOS)
+
+### 👥 Precreated Demo Users
+
+| Username | Password |
+|---------|----------|
+| John | demo123 |
+| Eve | demo123 |
+| Frank | demo123 |
+| Joe | demo123 |
+| Bob | demo123 |
+| Adele | demo123 |
+| Lily | demo123 |
+| Mike | demo123 |
+| Sophia | demo123 |
+| Chris | demo123 |
+| David | demo123 |
+| Emma | demo123 |
+
+
+### 🏠 Precreated Demo Rooms
+
+| Room Title | Type | Admin | Capacity | Password |
+|-----------|------|------|----------|----------|
+| Quick Study Sprint | Public | Lily | 5 | — |
+| Private Focus Group | Private | Chris | 4 | study123 |
+| Math Study Group | Public | Emma | 6 | — |
+| CS Algorithm Practice | Public | John | 8 | — |
+| Late Night Grind | Private | Eve | 3 | team456 |
+
+
 ## Troubleshooting
 
 ### Common Issues
