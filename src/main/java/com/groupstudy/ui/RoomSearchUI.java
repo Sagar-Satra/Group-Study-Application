@@ -14,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -119,8 +118,7 @@ public class RoomSearchUI {
                 if (room.getTitle().toLowerCase().contains(keyword)) {
 
                     if (room.isClosed()) continue;
-                    if (room.getCurrentSize() >= room.getCapacity()) continue;
-
+ 
                     VBox roomDetails = createRoomDetails(stage, room, messageLabel);
                     resultArea.getChildren().add(roomDetails);
 
@@ -179,6 +177,14 @@ public class RoomSearchUI {
         typeLabel.setTextFill(Color.web("#7f8c8d"));
 
         card.getChildren().addAll(foundLabel, nameLabel, adminLabel, capacityLabel, typeLabel);
+        
+        // if the room is full, add a Full label and prevent user to join
+        if (room.getCurrentSize() >= room.getCapacity()) {
+        		Label fullLabel = new Label("⚠️ ROOM FULL");
+        		fullLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+            fullLabel.setTextFill(Color.web("#e74c3c"));
+            card.getChildren().add(fullLabel);
+        }
         
         Button joinBtn = createJoinButton(stage, room, messageLabel, null);
         card.getChildren().add(joinBtn);
@@ -287,6 +293,13 @@ public class RoomSearchUI {
                 messageLabel.setText("You must be logged in.");
                 messageLabel.setTextFill(Color.web("#e74c3c"));
                 messageLabel.setVisible(true);
+                return;
+            }
+            
+         // if the room is full, don't allow user to join, except if the user is admin 
+            boolean isAdmin = room.isAdmin(currentUser);
+            if (!isAdmin && room.getCurrentSize() >= room.getCapacity()) {
+            		LobbyUI.showAlert("Room is Full!", room.getTitle() + " has reached maximum capacity (" + room.getCapacity() + " users).");
                 return;
             }
 

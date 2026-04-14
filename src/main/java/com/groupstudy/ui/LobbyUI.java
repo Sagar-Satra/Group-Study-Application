@@ -147,7 +147,13 @@ public class LobbyUI {
 
             card.setOnMouseClicked(e -> {
                 if (currentUser == null) return;
-
+                
+                // if the room is full, don't allow user to join, except if the user is admin 
+                boolean isAdmin = room.isAdmin(currentUser);
+                if (!isAdmin && room.getCurrentSize() >= room.getCapacity()) {
+                		showAlert("Room is Full!", room.getTitle() + " has reached maximum capacity (" + room.getCapacity() + " users).");
+                    return;
+                }
                 room.addUser(currentUser);
                 currentUser.setLastInteractionTime(0);
                 currentUser.recordAction(new ActionRecord(ActionRecord.ActionType.JOIN, room.getTitle()));
@@ -204,5 +210,13 @@ public class LobbyUI {
 
     public static StudyRoom findRoomById(String roomId) {
         return Main.getRoomManager().getRoom(roomId);
+    }
+    
+    public static void showAlert(String title, String message) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

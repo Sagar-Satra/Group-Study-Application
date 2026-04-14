@@ -61,6 +61,14 @@ public class RoomCardUI extends VBox {
 
         this.getChildren().addAll(titleRow, adminLabel, capacityLabel, timeLabel);
 
+        // if the room is full, add a Full label and prevent user to join
+        if (room.getCurrentSize() >= room.getCapacity()) {
+        		Label fullLabel = new Label("⚠️ ROOM FULL");
+        		fullLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+            fullLabel.setTextFill(Color.web("#e74c3c"));
+            this.getChildren().add(fullLabel);
+        }
+        
         this.setSpacing(5);
 
         startTimer();
