@@ -174,6 +174,7 @@ mvn clean javafx:run
 - **Room Leaderboard**: Ranks participants in current session by trophy count
 - Real-time leaderboard updates
 - Notification when reaching #1 position
+- Leaderboard is sorted based on Trophy count. In case there is a tie between users, studied time is compared to rank the users.
 
 ### 5. Notification System
 - Queue-based notification system (FIFO)
@@ -354,8 +355,9 @@ All core data structures are implemented from scratch (no Java Collections Frame
 
 ### Leaderboard View
 - Table with rankings (Rank, Username, Trophies, Study Time)
-- Current user's rank highlighted
+- Current user's rank highlighted below the table
 - Supports both global and room-specific views
+- Leaderboard is sorted based on Trophy count. In case there is a tie between users, studied time is compared to rank the users
 
 ### Trophy Collection
 - Grid layout of collected Pokemon trophies
@@ -372,7 +374,7 @@ All core data structures are implemented from scratch (no Java Collections Frame
 
 ## License
 
-This project is created as part of the Data Structures course (INFO 6205) at Northeastern University.
+This project is created as part of the Program Structures and Algorithm course (INFO 6205) at Northeastern University.
 
 ## Acknowledgments
 - Northeastern University - PSA Course - Professor Jones
