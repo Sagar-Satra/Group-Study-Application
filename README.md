@@ -288,9 +288,10 @@ The system is pre-populated using a DataInitializer service:
 - Each user is assigned a random Pokémon upon joining a room
 - Study progress, Pokémon evolution, and leaderboard data are partially simulated
 
-> Note: User behavior and Pokémon progression are randomized for demonstration purposes.
-> Note: For demonstration purposes, time is accelerated (seconds represent minutes), and user behavior is simulated.
-> Note: UI icons may look slightly different or not display properly depending on the operating system (Windows vs macOS).
+> Notes:
+> - User behavior and Pokémon progression are randomized for demonstration purposes  
+> - Time is accelerated (seconds represent minutes)  
+> - UI icons may render differently across operating systems (Windows vs macOS)
 
 <table>
 <tr>
@@ -317,7 +318,7 @@ The system is pre-populated using a DataInitializer service:
 
 <td valign="top">
 
-### 🏠 Demo Rooms
+### 🏠 Precreated Demo Rooms
 
 | Room Title | Type | Capacity | Password |
 |-----------|------|----------|----------|
