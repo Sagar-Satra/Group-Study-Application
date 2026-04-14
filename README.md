@@ -320,7 +320,7 @@ The system is pre-populated using a DataInitializer service:
 
 ### 🏠 Precreated Demo Rooms
 
-| Room Title | Type | admin | Capacity | Password |
+| Room Title | Type | Admin | Capacity | Password |
 |-----------|------|------|----------|----------|
 | Quick Study Sprint | Public | Lily | 5 | — |
 | Private Focus Group | Private | Chris | 4 | study123 |
