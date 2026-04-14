@@ -133,7 +133,7 @@ public class LobbyUI {
         VBox myRoomSection = new VBox(10);
         VBox publicRoomSection = new VBox(10);
 
-        Label myTitle = new Label("🏠 My Rooms");
+        Label myTitle = new Label("🏠 My Rooms (as Admin)");
         Label publicTitle = new Label("🌐 Public Rooms");
 
         myTitle.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
