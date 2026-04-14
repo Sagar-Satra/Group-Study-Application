@@ -129,6 +129,7 @@ The system is pre-populated using a DataInitializer service:
 | CS Algorithm Practice | Public | John | 8 | — |
 | Late Night Grind | Private | Eve | 3 | team456 |
 
+Note: Suggested demo flow diagram can be found in the REAMDE.md demo flow section
 
 ## Troubleshooting
 
